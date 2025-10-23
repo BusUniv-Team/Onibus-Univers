@@ -1,10 +1,23 @@
-import express from "express";
-import { cadastrarUniversitario } from "../controllers/cadastroController.js";
-import upload from "../middlewares/uploadMiddleware.js";
+import express from 'express'
+import multer from 'multer'
+import path from 'path'
+import { cadastrarUniversitario } from '../controllers/cadastroController.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/", upload.single("comprovante"), cadastrarUniversitario);
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, path.resolve('uploads')),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+})
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype !== 'application/pdf') return cb(new Error('Apenas PDFs são aceitos'))
+    cb(null, true)
+  }
+})
 
-export default router;
+router.post('/', upload.single('comprovante'), cadastrarUniversitario)
+
+export default router
 

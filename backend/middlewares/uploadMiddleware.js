@@ -1,7 +1,7 @@
 import multer from "multer";
 import path from "path";
 
-// Define onde e como os PDFs serao salvos
+// define onde e como os pdf serao salvos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// Filtro para aceitar so pdf
+// filtro pra aceitar so pdf
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === "application/pdf") {
     cb(null, true);
