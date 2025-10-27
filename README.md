@@ -149,7 +149,9 @@ O projeto será executado em:
 
 ---
 
-## 🧾 Licença
 
-Este projeto está sob a licença **MIT** — sinta-se livre para estudar, modificar e colaborar.  
-© 2025 - Projeto BusUniv
+## 🧾 Licença
+Este projeto é proprietário.  
+Você pode estudá-lo e se inspirar, mas **não pode copiar, modificar ou redistribuir** sem permissão.  
+© 2025 - Jailton Pinheiro. Todos os direitos reservados.
+
