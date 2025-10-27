@@ -144,7 +144,9 @@ O projeto será executado em:
 | Nome | Função | Instagram | GitHub |
 |------|---------|--------|
 | **Jailton Pinheiro** | Developer Full Stack / Líder Técnico | [@j.piinheiro] | (https://github.com/FenixLzk) |
+
 | **Marcel Kaliq** | Database Developer / Front-End Support | [@marcel_kaliq] | (https://github.com/Snowlyzin) |
+
 | **Rodrigo Chagas** | Front-End Developer / UX & MySQL Support | [@rodrigochagasofficial]| (https://github.com/RChagaz) |
 
 ---
