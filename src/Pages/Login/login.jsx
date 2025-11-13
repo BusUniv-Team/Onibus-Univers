@@ -1,15 +1,6 @@
 import React from "react";
 import fundo from "../../assets/fundo.jpg"; // imagem de fundo
 
-<<<<<<< HEAD
-function Login() {
-    return (
-        <div>
-            <p>Alguma coisa</p>
-        </div>
-    );
-    }
-=======
 export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,4 +52,3 @@ export default function Login() {
     </div>
   );
 }
->>>>>>> 42c2e5300df4a55493e476985de0ff25e00020e1
