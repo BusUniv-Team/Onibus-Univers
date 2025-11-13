@@ -38,7 +38,6 @@ function Home() {
         try {
           data = JSON.parse(text)
         } catch (err) {
-          // se nao for json, guardar o texto bruto como mensagem
           data = { message: text }
         }
       }
