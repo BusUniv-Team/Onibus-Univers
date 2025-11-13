@@ -1,11 +1,30 @@
-import React from "react";
-import fundo from "../../assets/fundo.jpg"; // imagem de fundo
+import React, { useState } from "react";
+import fundo from "../../assets/fundo.jpg";
+import "./login.css";
 
 export default function Login() {
-  const handleSubmit = (e) => {
+  const [usuario, setUsuario] = useState("");
+  const [senha, setSenha] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aqui você futuramente envia os dados pro backend
-    console.log("Login enviado!");
+
+    try {
+      const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usuario, senha }),
+      });
+
+      if (response.ok) {
+        alert("Login realizado com sucesso!");
+      } else {
+        alert("Usuário ou senha incorretos!");
+      }
+    } catch (error) {
+      console.error("Erro ao conectar com o servidor:", error);
+      alert("Erro ao tentar fazer login. Tente novamente.");
+    }
   };
 
   return (
@@ -21,34 +40,30 @@ export default function Login() {
         alignItems: "center",
       }}
     >
-      <div className="card shadow-lg p-4" style={{ width: "350px", borderRadius: "15px" }}>
-        <h2 className="text-center mb-4 text-primary fw-bold">Ônibus Faculdade</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="usuario" className="form-label">Usuário</label>
-            <input
-              type="text"
-              id="usuario"
-              className="form-control"
-              placeholder="Digite seu usuário"
-              required
-            />
-          </div>
+      <form onSubmit={handleSubmit}>
+        <h1>Ônibus Faculdade:</h1>
 
-          <div className="mb-3">
-            <label htmlFor="senha" className="form-label">Senha</label>
-            <input
-              type="password"
-              id="senha"
-              className="form-control"
-              placeholder="Digite sua senha"
-              required
-            />
-          </div>
+        <label htmlFor="usuario">Usuário:</label><br />
+        <input
+          id="usuario"
+          type="text"
+          placeholder="Digite seu usuário"
+          value={usuario}
+          onChange={(e) => setUsuario(e.target.value)}
+        /><br /><br />
 
-          <button type="submit" className="btn btn-primary w-100">Entrar</button>
-        </form>
-      </div>
+        <label htmlFor="senha">Senha:</label><br />
+        <input
+          id="senha"
+          type="password"
+          placeholder="Digite sua senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+        /><br /><br />
+
+        <button type="submit">Entrar</button>
+      </form>
     </div>
   );
 }
+
