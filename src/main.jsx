@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Poll />
+    <Home />
         </StrictMode>,
 )
 
