@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "onibus-backend",
   "version": "1.0.0",
   "description": "Backend do sistema Onibus",
   "main": "server.js",

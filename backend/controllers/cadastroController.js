@@ -1,37 +1,61 @@
-export const cadastrarUniversitario = (req, res) => {
+import bcrypt from 'bcryptjs';
+import Usuario from '../models/usuario.js';
+
+export const registrarUsuario = async (req, res) => {
   try {
-    // logs para diagnóstico
-    console.log('--- cadastro request ---');
-    console.log('body:', req.body);
-    console.log('req.file:', req.file);
-    console.log('req.files:', req.files);
+    console.log('> registrarUsuario body:', req.body);
+    console.log('> registrarUsuario file:', req.file);
 
-    const { cpf, telefone, email } = req.body;
+    // nomes devem corresponder ao form (nome, turno, faculdade, curso, cpf, telefone, email, periodo)
+    const {
+      nome,
+      turno,
+      faculdade,
+      curso,
+      cpf,
+      telefone,
+      email,
+      periodo
+    } = req.body;
 
-    // aceitar várias formas (multer.single => req.file, multer.fields => req.files.comprovante)
-    const comprovante =
-      req.file ||
-      (req.files && (req.files.comprovante ? (Array.isArray(req.files.comprovante) ? req.files.comprovante[0] : req.files.comprovante) : null)) ||
-      null;
-
-    // validação
-    if (!cpf || !telefone || !email || !comprovante) {
-      return res.status(400).json({ message: "Preencha todos os campos e envie o PDF!" });
+    // validação simples
+    if (!nome || !turno || !faculdade || !curso || !cpf || !telefone || !email || !periodo) {
+      return res.status(400).json({ message: 'Preencha todos os campos.' });
     }
 
-    console.log("Novo universitário cadastrado:", cpf, email, 'arquivo:', comprovante.filename || comprovante.originalname);
+    if (!req.file) {
+      return res.status(400).json({ message: 'Erro: Comprovante (PDF) é obrigatório.' });
+    }
 
-    return res.status(200).json({
-      message: "Cadastro recebido com sucesso!",
-      data: {
-        cpf,
-        telefone,
-        email,
-        comprovante: comprovante.filename || comprovante.originalname
-      }
+    const comprovantePath = req.file.filename;
+
+    // criptografa CPF como senha (string)
+    const salt = await bcrypt.genSalt(10);
+    const senhaCriptografada = await bcrypt.hash(String(cpf), salt);
+
+    const novoUsuario = await Usuario.create({
+      Nome: nome,
+      Email: email,
+      CPF: cpf,
+      Semestre: periodo,
+      Turno: turno,
+      Comprovante: comprovantePath,
+      Faculdade: faculdade,
+      Telefone: telefone,
+      Curso: curso,
+      senha: senhaCriptografada,
+      Cargos: 'aluno'
+    });
+
+    return res.status(201).json({
+      message: 'Usuário cadastrado com sucesso!',
+      usuario: novoUsuario
     });
   } catch (error) {
-    console.error("Erro no cadastro:", error);
-    return res.status(500).json({ message: "Erro interno do servidor" });
+    console.error('Erro registrarUsuario:', error);
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(400).json({ message: 'Erro: CPF ou Email já cadastrado.' });
+    }
+    return res.status(500).json({ message: 'Erro ao registrar usuário.', error: error.message });
   }
 };

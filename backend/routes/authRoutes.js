@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import path from 'path'
-import { cadastrarUniversitario } from '../controllers/cadastroController.js'
+import { registrarUsuario } from '../controllers/cadastroController.js'
 
 const router = express.Router()
 
@@ -17,7 +17,7 @@ const upload = multer({
   }
 })
 
-router.post('/', upload.single('comprovante'), cadastrarUniversitario)
+router.post('/', upload.single('comprovante'), registrarUsuario)
 
 export default router
 
