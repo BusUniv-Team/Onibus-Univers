@@ -1,0 +1,82 @@
+.container {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("fundo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  padding: 20px; /* evita corte em telas pequenas */
+  box-sizing: border-box;
+}
+
+/* Formulário central */
+form {
+  background-color: rgba(3, 68, 19, 0.9);
+  padding: 32px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 360px; /* limita o tamanho máximo */
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* Título */
+form h1 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-size: 28px;
+}
+
+/* Campos */
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ffffff;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+/* Botão */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0e6624;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #ffffff;
+  color: #0e6624;
+}
+
+label {
+  color: aliceblue;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 480px) {
+  form {
+    padding: 24px;
+    max-width: 90%;
+  }
+
+  form h1 {
+    font-size: 24px;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+  }
+}
