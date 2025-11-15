@@ -1,27 +1,31 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-* {
+/* --- Estilos Globais e Reset --- */
+.poll-page * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
 
-body {
-  background-color: rgb(7, 84, 0);
+.poll-page {
+  background-color: #001a00;
+  width: 100%;
   min-height: 100vh;
   display: flex;
-  justify-content: flex-start;
 }
 
-.page-wrapper {
+/* WRAPPER PARA ISOLAR (mantido) */
+.poll-page {
   display: flex;
   width: 100%;
   min-height: 100vh;
 }
 
-#sidebar {
+/* =============== SIDEBAR  =============== */
+
+.poll-page .poll-sidebar {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -34,18 +38,18 @@ body {
   z-index: 10;
 }
 
-#sidebar_content {
+.poll-page .sidebar-content {
   padding: 12px;
 }
 
-#side-items {
+.poll-page .sidebar-items {
   display: flex;
   flex-direction: column;
   gap: 8px;
   list-style: none;
 }
 
-.side-item {
+.poll-page .sidebar-item {
   border-radius: 8px;
   padding: 12px;
   cursor: pointer;
@@ -53,15 +57,15 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.side-item.active {
+.poll-page .sidebar-item.active {
   background-color: rgb(72, 119, 0);
 }
 
-.side-item:hover:not(.active) {
+.poll-page .sidebar-item:hover:not(.active) {
   background-color: rgba(155, 255, 4, 0.319);
 }
 
-.side-item a {
+.poll-page .sidebar-item a {
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -70,11 +74,11 @@ body {
   gap: 10px;
 }
 
-.side-item.active a {
+.poll-page .sidebar-item.active a {
   color: #fefefe;
 }
 
-#open_btn {
+.poll-page .sidebar-toggle-btn {
   position: absolute;
   top: 30px;
   right: -10px;
@@ -87,15 +91,15 @@ body {
   cursor: pointer;
 }
 
-#open_btn_icon {
+.poll-page .sidebar-toggle-icon {
   transition: transform 0.3s ease;
 }
 
-.open-sidebar #open_btn_icon {
+.poll-page .open .sidebar-toggle-icon {
   transform: rotate(180deg);
 }
 
-.item-description {
+.poll-page .sidebar-description {
   width: 0px;
   overflow: hidden;
   white-space: nowrap;
@@ -104,129 +108,214 @@ body {
   height: 0;
 }
 
-#sidebar.open-sidebar {
-  min-width: 15%;
-}
-
-#sidebar.open-sidebar .item-description {
+.poll-page .poll-sidebar.open .sidebar-description {
   width: 150px;
   height: auto;
 }
 
-#form_container {
+.poll-page .poll-sidebar.open {
+  min-width: 15%;
+}
+
+/* =============== FORM CONTAINER =============== */
+
+.poll-page .poll-form-container {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  padding-left: 500px;
+  min-height: 100vh;
+  /* Garante espaço para a sidebar */
+  padding-left: calc(82px + 20px); 
+
 }
 
-#input_container {
-  background-color: #ffffff;
+.poll-page .poll-input-area {
+  background-color: rgba(0, 20, 10, 0.9);
   padding: 30px;
   width: 90%;
-  max-width: 900px;
+  max-width: 1000px;
   border-radius: 12px;
   box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-#input_container h3 {
-    margin-bottom: 8px;
-    margin-top: 15px;   
-    font-weight: 600; 
+.poll-page .poll-input-area h3 {
+  color:#fefefe;
+  margin-bottom: 8px;
+  margin-top: 15px;
+  font-weight: 600;
 }
 
-#form_header {
+/* --- FACULDADE --- */
+
+/* ADICIONADO: Container para alinhar os botões de faculdade */
+.faculdade-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-#form_title {
-  position: relative;
-  display: inline-block;
-  font-weight: 700;
-  margin-bottom: 25px;
-}
-
-#form_title::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%; 
-  height: 3px;
-  border-radius: 30px;
-  background-color: rgb(72, 119, 0);
-}
-
-.options-group {
-  display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-label {
-  position: relative;
-  color: #000;
+.faculdade-card {
+  width: 250px;
+  text-align: center;
+  font-weight: 600;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
+  display: flex;
   justify-content: center;
-  gap: 0.6em;
-  border: 2px solid #06a104;
-  padding: 0.8em 1.5em;
-  border-radius: 0.5em;
-  margin: 6px 10px;
-  transition: all 0.2s ease;
+  padding: 15px 0;
 }
 
-label input[type="checkbox"],
-label input[type="radio"] {
+.faculdade-card input {
   display: none;
 }
 
-label::before {
-  content: "";
-  min-width: 18px;
-  min-height: 18px;
-  border-radius: 50%;
-  border: 2px solid #06a104;
-  background: transparent;
+.faculdade-card span {
+  border: 2px solid #004615;
+  border-radius: 10px;
+  padding: 8px 14px;
+  width: 100%;
+  background: #00200f;
+  color: #ffffff; 
+  transition: .2s;
+}
+
+/* Estilo ativo do botão de faculdade */
+.faculdade-card input:checked + span {
+  background: #00872d;
+  border-color: #00872d;
+  color: #fff;
+}
+
+
+/* --- DIAS E OPÇÕES --- */
+
+/* Container dos dias */
+.dias-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.dia-card {
+  background: #00200f;
+  border: 2px solid #004615;
+  padding: 15px;
+  border-radius: 10px;
+  width: 200px;
+  color: #fff;
   transition: all 0.3s ease;
 }
 
-.dias label::before {
-  border-radius: 0.3em;
+.dia-card.active {
+  border-color: #00872d;
+  background-color: #002d13;
+  box-shadow: 0 0 10px rgba(0, 135, 45, 0.5);
 }
 
-label:has(input:checked) {
+.dia-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  cursor: pointer; 
+}
+
+/* Estilização do Checkbox no header do dia */
+.dia-top input[type="checkbox"] {
+  appearance: none; 
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #06a104;
+  border-radius: 4px;
+  background-color: transparent;
+  display: grid;
+  place-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Estilo do checkbox customizado quando checado */
+.dia-top input[type="checkbox"]:checked {
   background-color: #00872d;
-  color: #fff;
   border-color: #00872d;
 }
 
-label:has(input[type="radio"]:checked)::before {
-  background-color: #fff;
-  box-shadow: inset 0 0 0 6px #00872d;
-  border-color: #fff;
-}
-
-label:has(input[type="checkbox"]:checked)::before {
+.dia-top input[type="checkbox"]:checked::before {
   content: "✔";
   font-size: 14px;
-  color: #00872d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
-  border: 2px solid #fff;
+  color: #fff;
 }
 
-.btn-default {
+/* Grupos internos de Turno e Trajeto */
+.turno-group,
+.trajeto-group {
+    padding-top: 10px; /* Adiciona espaçamento entre os grupos */
+    border-top: 1px solid rgba(0, 135, 45, 0.2); /* Separador visual */
+    margin-top: 10px;
+}
+.turno-group {
+    border-top: none; 
+}
+
+.turno-group label,
+.trajeto-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+  margin: 6px 0; 
+  cursor: pointer;
+  font-size: 14px; 
+}
+
+/* Estilização dos Radio Buttons customizados */
+.turno-group input[type="radio"],
+.trajeto-group input[type="radio"] {
+  /* Esconde o rádio nativo */
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #06a104;
+  border-radius: 50%;
+  background-color: transparent;
+  display: grid;
+  place-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Estilo do rádio customizado quando checado */
+.turno-group input[type="radio"]:checked,
+.trajeto-group input[type="radio"]:checked {
+  border-color: #00872d;
+}
+
+.turno-group input[type="radio"]:checked::before,
+.trajeto-group input[type="radio"]:checked::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #00872d;
+  transition: all 0.2s ease;
+}
+
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.poll-page .poll-submit-btn {
   background-color: #00872d;
   display: flex;
   align-items: center;
@@ -239,24 +328,22 @@ label:has(input[type="checkbox"]:checked)::before {
   color: #ffffff;
   cursor: pointer;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 50px;
   transition: background-color 0.3s ease;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
 }
 
-.btn-default:hover {
+.poll-page .poll-submit-btn:hover {
   background-color: rgb(128, 192, 31);
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .page-wrapper {
-    flex-direction: column;
-  }
+/* =============== RESPONSIVO (Ajustado) =============== */
 
-  #sidebar {
+@media (max-width: 768px) {
+  /* Mobile Sidebar: Muda de lateral para inferior */
+  .poll-page .poll-sidebar {
     flex-direction: row;
     height: 60px;
     width: 100%;
@@ -268,30 +355,54 @@ label:has(input[type="checkbox"]:checked)::before {
     left: 0;
     z-index: 10;
   }
+  
+  .poll-page .sidebar-content {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
 
-  #side-items {
+  .poll-page .sidebar-items {
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
+    gap: 0;
+    height: 100%;
+    padding: 0 10px;
+  }
+  
+  .poll-page .sidebar-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+  .poll-page .sidebar-item a {
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
   }
 
-  #open_btn {
+  .poll-page .sidebar-description {
+    width: auto;
+    height: auto;
+    font-size: 10px;
+  }
+  
+  .poll-page .sidebar-toggle-btn {
     display: none;
   }
 
-  #input_container {
-    height: auto;
-    margin-bottom: 80px;
+  /* Mobile Form: Ajusta o padding para compensar a sidebar inferior */
+  .poll-page .poll-input-area {
+    margin-bottom: 80px; /* Adiciona espaço para a sidebar inferior */
   }
 
-  #form_container {
-    margin-top: 60px; 
-    padding-left: 80px; 
-
-  }
-
-  label {
-    font-size: 14px;
-    padding: 10px 12px;
+  .poll-page .poll-form-container {
+    padding-left: 20px; /* Remove o padding extra da sidebar lateral */
   }
 }

@@ -29,6 +29,7 @@ export default function Login() {
 
   return (
     <div
+      className="container-login"
       style={{
         backgroundImage: `url(${fundo})`,
         backgroundSize: "cover",
@@ -40,11 +41,12 @@ export default function Login() {
         alignItems: "center",
       }}
     >
-      <form onSubmit={handleSubmit}>
-        <h1>Ônibus Faculdade:</h1>
+      <form className="form-login" onSubmit={handleSubmit}>
+        <h1 className="titulo-login">Ônibus Faculdade:</h1>
 
-        <label htmlFor="usuario">Usuário:</label><br />
+        <label className="label-usuario" htmlFor="usuario">Usuário:</label><br />
         <input
+          className="input-usuario"
           id="usuario"
           type="text"
           placeholder="Digite seu usuário"
@@ -52,8 +54,9 @@ export default function Login() {
           onChange={(e) => setUsuario(e.target.value)}
         /><br /><br />
 
-        <label htmlFor="senha">Senha:</label><br />
+        <label className="label-senha" htmlFor="senha">Senha:</label><br />
         <input
+          className="input-senha"
           id="senha"
           type="password"
           placeholder="Digite sua senha"
@@ -61,9 +64,8 @@ export default function Login() {
           onChange={(e) => setSenha(e.target.value)}
         /><br /><br />
 
-        <button type="submit">Entrar</button>
+        <button className="botao-login" type="submit">Entrar</button>
       </form>
     </div>
   );
 }
-
