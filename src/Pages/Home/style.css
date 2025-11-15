@@ -1,32 +1,36 @@
+/* ----- ROOT VARIÁVEIS ----- */
 :root {
   --card-bg: rgba(0, 20, 10, 0.9);
   --accent: #6a0dad;
   --input-bg: #0f2e1f;
   --input-border: #2e8b57;
   --radius: 10px;
-  --font: "Inter", system-ui, sans-serif;
+  --font: "Poppins", system-ui, sans-serif;
   --muted: #cfcfcf;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* Container geral da página */
+.home-page {
+  height: 100vh;
+  width: 100%;
+  background-image: url('/fundo2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 
-body, html, #root {
-  height: 100%;
-  margin: 0;
-  font-family: var(--font);
-}
-
-.container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100%;
 }
 
-.card {
+.home-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Card */
+.home-card {
   background: var(--card-bg);
   padding: 24px;
   border-radius: var(--radius);
@@ -34,16 +38,19 @@ body, html, #root {
   color: #fff;
   width: 100%;
   max-width: 450px;
+
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 12px;
 }
 
-.span-2 {
+.home-span-2 {
   grid-column: 1 / -1;
 }
 
-input, select {
+/* Inputs */
+.home-card input,
+.home-card select {
   width: 100%;
   padding: 8px 10px;
   font-size: 0.9rem;
@@ -53,18 +60,19 @@ input, select {
   color: #fff;
 }
 
-input:focus, select:focus {
+.home-card input:focus,
+.home-card select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 3px 6px rgba(106, 13, 173, 0.5);
 }
 
-/* --- Input de arquivo --- */
-.file-input {
+/* Arquivo */
+.home-file-input {
   display: none;
 }
 
-.file-wrapper {
+.home-file-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -78,23 +86,23 @@ input:focus, select:focus {
   grid-column: 1 / -1;
 }
 
-.file-name {
+.home-file-name {
   padding: 8px 10px;
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex-grow: 1;
 }
 
-.file-btn {
+.home-file-btn {
   background: var(--input-border);
   color: #fff;
   padding: 8px 12px;
   font-weight: 500;
 }
 
-/* --- Botão --- */
-.btn {
+/* Botão */
+.home-btn {
   grid-column: 1 / -1;
   padding: 10px;
   font-size: 1rem;
@@ -104,31 +112,34 @@ input:focus, select:focus {
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
   margin-top: 8px;
+  transition: transform 0.1s, background 0.2s;
 }
 
-.btn:hover {
+.home-btn:hover {
   background: #4b0082;
   transform: translateY(-1px);
 }
 
-.message {
+/* Mensagem */
+.home-message {
   grid-column: 1 / -1;
   font-size: 0.85rem;
   text-align: center;
   margin-top: 4px;
 }
 
-.message.error {
+.home-message.error {
   color: #ff6b6b;
 }
 
-.message.success {
+.home-message.success {
   color: #a8ffb0;
 }
 
-/* Responsivo */
+/* RESPONSIVO */
 @media (max-width: 480px) {
-  .card { grid-template-columns: 1fr; }
+  .home-card {
+    grid-template-columns: 1fr;
+  }
 }

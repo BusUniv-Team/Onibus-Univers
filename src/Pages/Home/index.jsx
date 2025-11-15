@@ -45,100 +45,108 @@ function Home() {
   };
 
   return (
-    <div
-      className="container"
-      style={{
-        backgroundImage: `url(/fundo2.jpg)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
-    >
-      <form className="card" onSubmit={handleSubmit}>
-        <input
-          name="nome"
-          type="text"
-          placeholder="Nome completo"
-          value={form.nome}
-          onChange={handleChange}
-          required
-          className="span-2"
-        />
-        <select name="turno" value={form.turno} onChange={handleChange} required>
-          <option value="">Turno</option>
-          <option value="Diurno">Diurno</option>
-          <option value="Integral">Integral</option>
-        </select>
-        <select name="faculdade" value={form.faculdade} onChange={handleChange} required>
-          <option value="">Faculdade</option>
-          <option value="UESC">UESC</option>
-          <option value="Anhanguera">Anhanguera</option>
-          <option value="UNEX">UNEX</option>
-        </select>
-        <input
-          name="curso"
-          type="text"
-          placeholder="Curso"
-          value={form.curso}
-          onChange={handleChange}
-          required
-          className="span-2"
-        />
-        <input
-          name="cpf"
-          type="text"
-          placeholder="CPF"
-          maxLength="11"
-          value={form.cpf}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="telefone"
-          type="tel"
-          placeholder="Telefone"
-          value={form.telefone}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="span-2"
-        />
-        <input
-          name="periodo"
-          type="text"
-          placeholder="Período (1-12)"
-          value={form.periodo}
-          onChange={handleChange}
-          required
-        />
-
-        <label className="file-wrapper">
-          <span className="file-name">
-            {comprovante ? comprovante.name : "Comprovante (PDF)"}
-          </span>
-          <span className="file-btn">Anexar</span>
+    <div className="home-page">
+      <div className="home-container">
+        <form className="home-card" onSubmit={handleSubmit}>
           <input
-            type="file"
-            className="file-input"
-            accept="application/pdf"
-            onChange={handleFileChange}
+            name="nome"
+            type="text"
+            placeholder="Nome completo"
+            value={form.nome}
+            onChange={handleChange}
+            required
+            className="home-span-2"
+          />
+
+          <select name="turno" value={form.turno} onChange={handleChange} required>
+            <option value="">Turno</option>
+            <option value="Diurno">Diurno</option>
+            <option value="Integral">Integral</option>
+          </select>
+
+          <select name="faculdade" value={form.faculdade} onChange={handleChange} required>
+            <option value="">Faculdade</option>
+            <option value="UESC">UESC</option>
+            <option value="Anhanguera">Anhanguera</option>
+            <option value="UNEX">UNEX</option>
+          </select>
+
+          <input
+            name="curso"
+            type="text"
+            placeholder="Curso"
+            value={form.curso}
+            onChange={handleChange}
+            required
+            className="home-span-2"
+          />
+
+          <input
+            name="cpf"
+            type="text"
+            placeholder="CPF"
+            maxLength="11"
+            value={form.cpf}
+            onChange={handleChange}
             required
           />
-        </label>
 
-        <button className="btn" type="submit" disabled={loading}>
-          {loading ? "Enviando..." : "Cadastrar"}
-        </button>
+          <input
+            name="telefone"
+            type="tel"
+            placeholder="Telefone"
+            value={form.telefone}
+            onChange={handleChange}
+            required
+          />
 
-        {message && <p className={`message ${message.type}`}>{message.text}</p>}
-      </form>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="home-span-2"
+          />
+
+          <input
+            name="periodo"
+            type="text"
+            placeholder="Período (1-12)"
+            value={form.periodo}
+            onChange={handleChange}
+            required
+          />
+
+          {/* Arquivo */}
+          <label className="home-file-wrapper">
+            <span className="home-file-name">
+              {comprovante ? comprovante.name : "Comprovante (PDF)"}
+            </span>
+
+            <span className="home-file-btn">Anexar</span>
+
+            <input
+              type="file"
+              className="home-file-input"
+              accept="application/pdf"
+              onChange={handleFileChange}
+              required
+            />
+          </label>
+
+          <button className="home-btn" type="submit" disabled={loading}>
+            {loading ? "Enviando..." : "Cadastrar"}
+          </button>
+
+          {message && (
+            <p className={`home-message ${message.type}`}>
+              {message.text}
+            </p>
+          )}
+        </form>
+      </div>
     </div>
   );
 }
