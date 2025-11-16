@@ -1,133 +1,154 @@
-import { useState } from 'react'
-import './style.css'
+import { useState } from "react";
+import "./style.css";
 
 function Home() {
-  const [cpf, setCpf] = useState('')
-  const [telefone, setTelefone] = useState('')
-  const [email, setEmail] = useState('')
-  const [comprovante, setComprovante] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState(null)
+  const [form, setForm] = useState({
+    nome: "",
+    turno: "",
+    faculdade: "",
+    curso: "",
+    cpf: "",
+    telefone: "",
+    email: "",
+    periodo: "",
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setMessage(null)
+  const [comprovante, setComprovante] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
-    if (!cpf || !telefone || !email || !comprovante) {
-      setMessage({ type: 'error', text: 'Preencha todos os campos e envie o PDF!' })
-      return
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleFileChange = (e) =>
+    setComprovante(e.target.files?.[0] ?? null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setMessage(null);
+
+    const { nome, turno, faculdade, curso, cpf, telefone, email, periodo } = form;
+
+    if (!nome || !turno || !faculdade || !curso || !cpf || !telefone || !email || !periodo || !comprovante) {
+      setMessage({ type: "error", text: "Preencha todos os campos e envie o PDF!" });
+      return;
     }
 
-    const formData = new FormData()
-    formData.append('cpf', cpf)
-    formData.append('telefone', telefone)
-    formData.append('email', email)
-    formData.append('comprovante', comprovante) // nome deve bater com multer.single('comprovante')
-
-    setLoading(true)
-    try {
-      const res = await fetch('http://localhost:3001/api/cadastro', {
-        method: 'POST',
-        body: formData
-      })
-
-      // ler como texto primeiro (isso vai evitar um erro de json input)
-      const text = await res.text()
-      let data = null
-      if (text) {
-        try {
-          data = JSON.parse(text)
-        } catch (err) {
-          data = { message: text }
-        }
-      }
-
-      if (!res.ok) throw new Error(data?.message || 'Erro no envio')
-
-      setMessage({ type: 'success', text: data?.message || 'Cadastro enviado com sucesso!' })
-      setCpf('')
-      setTelefone('')
-      setEmail('')
-      setComprovante(null)
-
-    } catch (err) {
-      setMessage({ type: 'error', text: err.message })
-    } finally {
-      setLoading(false)
+    const periodoNum = Number(periodo);
+    if (isNaN(periodoNum) || periodoNum < 1 || periodoNum > 12) {
+      setMessage({ type: "error", text: "Período deve ser um número de 1 a 12" });
+      return;
     }
-  }
+
+    console.log("📦 Dados do formulário:", Object.fromEntries(new FormData(e.target).entries()));
+    setMessage({ type: "success", text: "Cadastro pronto para envio (simulação)." });
+  };
 
   return (
-    <div className="container">
-      <form className="card" noValidate onSubmit={handleSubmit}>
-        <h1>Cadastro Universitário</h1>
-        <p className="subtitle">Digite suas informações abaixo</p>
+    <div className="home-page">
+      <div className="home-container">
+        <form className="home-card" onSubmit={handleSubmit}>
+          <input
+            name="nome"
+            type="text"
+            placeholder="Nome completo"
+            value={form.nome}
+            onChange={handleChange}
+            required
+            className="home-span-2"
+          />
 
-        <label className="field">
-          <span className="label-text">CPF</span>
+          <select name="turno" value={form.turno} onChange={handleChange} required>
+            <option value="">Turno</option>
+            <option value="Diurno">Diurno</option>
+            <option value="Integral">Integral</option>
+          </select>
+
+          <select name="faculdade" value={form.faculdade} onChange={handleChange} required>
+            <option value="">Faculdade</option>
+            <option value="UESC">UESC</option>
+            <option value="Anhanguera">Anhanguera</option>
+            <option value="UNEX">UNEX</option>
+          </select>
+
+          <input
+            name="curso"
+            type="text"
+            placeholder="Curso"
+            value={form.curso}
+            onChange={handleChange}
+            required
+            className="home-span-2"
+          />
+
           <input
             name="cpf"
             type="text"
-            inputMode="numeric"
-            pattern="\d*"
+            placeholder="CPF"
             maxLength="11"
-            placeholder="Digite seu CPF"
+            value={form.cpf}
+            onChange={handleChange}
             required
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
           />
-        </label>
 
-        <label className="field file-field">
-          <span className="label-text">Comprovante de Matrícula (PDF)</span>
-          <input
-            id="comprovante"
-            name="comprovante"
-            type="file"
-            accept="application/pdf"
-            required
-            onChange={(e) => setComprovante(e.target.files?.[0] ?? null)}
-          />
-          <span className="file-hint">Envie um PDF</span>
-        </label>
-
-        <label className="field">
-          <span className="label-text">Telefone</span>
           <input
             name="telefone"
             type="tel"
-            inputMode="tel"
-            placeholder="(00) 0 0000-0000"
+            placeholder="Telefone"
+            value={form.telefone}
+            onChange={handleChange}
             required
-            value={telefone}
-            onChange={(e) => setTelefone(e.target.value)}
           />
-        </label>
 
-        <label className="field">
-          <span className="label-text">Email</span>
           <input
             name="email"
             type="email"
-            placeholder="seu@exemplo.com"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            className="home-span-2"
           />
-        </label>
 
-        <button type="submit" className="btn" disabled={loading}>
-          {loading ? 'Enviando...' : 'Cadastrar'}
-        </button>
+          <input
+            name="periodo"
+            type="text"
+            placeholder="Período (1-12)"
+            value={form.periodo}
+            onChange={handleChange}
+            required
+          />
 
-        {message && (
-          <p style={{ marginTop: 12, color: message.type === 'error' ? '#b00020' : '#0a7a3a' }}>
-            {message.text}
-          </p>
-        )}
-      </form>
+          {/* Arquivo */}
+          <label className="home-file-wrapper">
+            <span className="home-file-name">
+              {comprovante ? comprovante.name : "Comprovante (PDF)"}
+            </span>
+
+            <span className="home-file-btn">Anexar</span>
+
+            <input
+              type="file"
+              className="home-file-input"
+              accept="application/pdf"
+              onChange={handleFileChange}
+              required
+            />
+          </label>
+
+          <button className="home-btn" type="submit" disabled={loading}>
+            {loading ? "Enviando..." : "Cadastrar"}
+          </button>
+
+          {message && (
+            <p className={`home-message ${message.type}`}>
+              {message.text}
+            </p>
+          )}
+        </form>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
