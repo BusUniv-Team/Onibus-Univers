@@ -25,7 +25,7 @@ app.use(express.json());
 app.use("/uploads", express.static(uploadsDir));
 app.use("/api/cadastro", cadastroRoutes);
 
-app.get("/", (req, res) => res.json({ message: "Servidor funcionando 🚀" }));
+app.get("/", (req, res) => res.json({ message: "Servidor funcionando" }));
 
 app.use((req, res) => res.status(404).json({ message: "Rota não encontrada" }));
 
