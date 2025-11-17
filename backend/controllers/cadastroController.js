@@ -1,37 +1,65 @@
-export const cadastrarUniversitario = (req, res) => {
+// model e bcrypt importar depois
+// const bcrypt = require("bcryptjs");
+// const { criarUsuario } = require("../models/usuario");
+
+async function cadastrarUsuario(req, res) {
   try {
-    // logs para diagnóstico
-    console.log('--- cadastro request ---');
-    console.log('body:', req.body);
-    console.log('req.file:', req.file);
-    console.log('req.files:', req.files);
+    
+    const {
+      nome,
+      email,
+      cpf,
+      semestre,
+      turno,
+      faculdade,
+      telefone,
+      curso,
+      senha,
+    } = req.body;
 
-    const { cpf, telefone, email } = req.body;
-
-    // aceitar várias formas (multer.single => req.file, multer.fields => req.files.comprovante)
-    const comprovante =
-      req.file ||
-      (req.files && (req.files.comprovante ? (Array.isArray(req.files.comprovante) ? req.files.comprovante[0] : req.files.comprovante) : null)) ||
-      null;
+    console.log("📥 Dados recebidos do frontend (cadastro):");
+    console.log({
+      nome,
+      email,
+      cpf,
+      semestre,
+      turno,
+      faculdade,
+      telefone,
+      curso,
+      senha,
+    });
 
     // validação
-    if (!cpf || !telefone || !email || !comprovante) {
-      return res.status(400).json({ message: "Preencha todos os campos e envie o PDF!" });
+    if (!nome || !email || !cpf) {
+      return res
+        .status(400)
+        .json({ mensagem: "Nome, email e CPF são obrigatórios." });
     }
 
-    console.log("Novo universitário cadastrado:", cpf, email, 'arquivo:', comprovante.filename || comprovante.originalname);
+    // preciso salvar isso no banco de dados depois 
 
-    return res.status(200).json({
-      message: "Cadastro recebido com sucesso!",
-      data: {
-        cpf,
-        telefone,
+    return res.status(201).json({
+      mensagem: "Marcel deu CU e mandou pro backend!",
+      dados: {
+        nome,
         email,
-        comprovante: comprovante.filename || comprovante.originalname
-      }
+        cpf,
+        semestre,
+        turno,
+        faculdade,
+        telefone,
+        curso,
+      },
     });
   } catch (error) {
-    console.error("Erro no cadastro:", error);
-    return res.status(500).json({ message: "Erro interno do servidor" });
+    console.error("❌ Erro no cadastrarUsuario:", error);
+    return res
+      .status(500)
+      .json({ mensagem: "Erro interno ao processar cadastro." });
   }
+}
+
+module.exports = {
+  cadastrarUsuario,
 };

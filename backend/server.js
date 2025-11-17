@@ -1,23 +1,23 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import path from "path";
-import cadastroRoutes from "./routes/authRoutes.js";
-import multer from 'multer' // adicione esta linha no topo
+// backend/server.js
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
 
-dotenv.config();
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use("/uploads", express.static(path.resolve("uploads"))); // rotas pdf
-app.use("/api/cadastro", cadastroRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Servidor funcionando 🚀");
-});
+app.use(express.json());
+
+
+app.use(cors());
+
+// Rotas de usuários
+app.use("/api/usuarios", userRoutes);
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
