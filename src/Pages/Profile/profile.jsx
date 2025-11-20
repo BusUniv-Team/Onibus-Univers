@@ -66,9 +66,23 @@ export default function ProfilePage() {
 
           {/* CONTAINER SCORE */}
           <div className="cardz">
-            <h2>Score</h2>
-            <p>Seu score será mostrado aqui</p>
-          </div>
+             <h2>Score</h2>
+
+          {/* BARRA DE ENERGIA DINÂMICA */}
+           <div className="energy-wrapper">
+              <div className="energy-bar">
+                {Array.from({ length: 7 }).map((_, i) => (
+             <div
+               key={i}
+              className={`energy-cell ${
+              i < 7 - 2 ? "" : "off"
+              }`}
+             ></div>
+            ))}
+    </div>
+  </div>
+</div>
+
         </div>
       </main>
     </div>

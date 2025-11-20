@@ -2,19 +2,14 @@
  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 .poll-page {
- 
   background-color: var(--cor-fundo); 
-  
   background-image: url("../../assets/galaxy2.jpg");
-
   background-size: cover;       
   background-position: center;  
   background-attachment: fixed; 
   min-height: 100vh;
   display: flex;
 }
-
-
 
   /* =============== VARIÁVEIS DE CORES E EFEITOS =============== */
  :root {
@@ -34,21 +29,16 @@
    padding: 0;
    box-sizing: border-box;
    font-family: "Poppins", sans-serif;
+
  }
 
  .poll-page {
-   /* MUDADO: Fundo principal para preto */
    background-color: var(--cor-fundo);
    width: 100%;
    min-height: 100vh;
-   display: flex;
- }
-
- /* WRAPPER PARA ISOLAR (mantido) */
- .poll-page {
-   display: flex;
-   width: 100%;
-   min-height: 100vh;
+   display: block !important;
+   position: relative;
+   overflow-x: hidden; 
  }
 
  /* =============== SIDEBAR =============== */
@@ -56,9 +46,7 @@
  .poll-page .poll-sidebar {
    display: flex;
    flex-direction: column;
-   /* MUDADO: Fundo da sidebar para preto */
    background-color: var(--cor-fundo);
-   /* ADICIONADO: Borda para destacar no fundo preto */
    border-right: 3px solid #204417; 
    height: 100vh;
    border-radius: 0 18px 18px 0;
@@ -67,6 +55,8 @@
    min-width: 82px;
    transition: all 0.4s ease;
    z-index: 10;
+   left: 0;
+
  }
 
  .poll-page .sidebar-content {
@@ -120,9 +110,7 @@
    position: absolute;
    top: 30px;
    right: -10px;
-   /* MUDADO: Botão para neon */
    background-color: var(--cor-neon-destaque);
-   /* MUDADO: Cor do ícone para preto (contraste) */
    color: var(--cor-fundo);
    border-radius: 100%;
    width: 22px;
@@ -131,7 +119,6 @@
    cursor: pointer;
  }
  
- /* ... (nenhuma mudança de layout aqui) ... */
  .poll-page .sidebar-toggle-icon {
    transition: transform 0.3s ease;
  }
@@ -178,10 +165,7 @@
    border-radius: 12px;
    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
    text-align: center;
-     background-image: url("../../assets/galaxy2.jpg");
-
-
-  
+   background-image: url("../../assets/galaxy2.jpg");
    
  }
 
