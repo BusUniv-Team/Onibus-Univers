@@ -1,5 +1,5 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
- @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 .poll-page {
   background-color: var(--cor-fundo); 
@@ -43,31 +43,8 @@
 
  /* =============== SIDEBAR =============== */
 
- .poll-page .poll-sidebar {
-   display: flex;
-   flex-direction: column;
-   background-color: var(--cor-fundo);
-   border-right: 3px solid #204417; 
-   height: 100vh;
-   border-radius: 0 18px 18px 0;
-   position: fixed;
-   top: 0;
-   min-width: 82px;
-   transition: all 0.4s ease;
-   z-index: 10;
-   left: 0;
-
- }
-
  .poll-page .sidebar-content {
    padding: 12px;
- }
-
- .poll-page .sidebar-items {
-   display: flex;
-   flex-direction: column;
-   gap: 8px;
-   list-style: none;
  }
 
  .poll-page .sidebar-item {
@@ -88,22 +65,6 @@
  .poll-page .sidebar-item:hover:not(.active) {
    /* MUDADO: Hover para neon transparente */
    background-color: rgba(57, 255, 20, 0.1);
- }
-
- .poll-page .sidebar-item a {
-   text-decoration: none;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   /* MUDADO: Cor do texto da sidebar para branco */
-   color: var(--cor-texto-principal);
-   gap: 10px;
- }
-
- .poll-page .sidebar-item.active a {
-   /* MUDADO: Cor do texto ativo para preto (melhor contraste) */
-   color: var(--cor-fundo);
-   font-weight: 600;
  }
 
  .poll-page .sidebar-toggle-btn {
@@ -158,7 +119,7 @@
    /* MUDADO: Fundo da área de input para preto */
    background-color: var(--cor-fundo);
    /* ADICIONADO: Borda para destacar */
-   border: 1px solid #045304;
+   border: 1px solid #023202;
    padding: 30px;
    width: 90%;
    max-width: 1000px;
@@ -217,6 +178,11 @@
    box-shadow: 0 0 10px rgba(57, 255, 20, 0.1);
  }
 
+ .faculdade-card span:hover {
+  border-color: var( --cor-neon-destaque); 
+  transform: translateY(-2px);
+ }
+
  /* Estilo ativo do botão de faculdade */
  .faculdade-card input:checked + span {
    /* MUDADO: Fundo para neon */
@@ -258,6 +224,11 @@
    background-color: var(--cor-fundo);
    /* MUDADO: Sombra para neon */
    box-shadow: var(--brilho-neon-medio);
+ }
+
+ .dia-card:hover {
+  border-color: var( --cor-neon-destaque); 
+  transform: translateY(-2px);
  }
 
  .dia-top {
@@ -393,28 +364,16 @@
    box-shadow: 0 0 25px 5px var(--cor-neon-destaque);
  }
 
- /* =============== RESPONSIVO (Layout Intocado) =============== */
+ /*  RESPONSIVO  */
 
- @media (max-width: 900px) {
-   /* Mobile Sidebar: Muda de lateral para inferior */
-   .poll-page .poll-sidebar {
-     flex-direction: row;
-     height: 60px;
-     width: 100%;
-     border-radius: 0;
-     justify-content: space-around;
-     align-items: center;
-     position: fixed;
-     bottom: 0;
-     left: 0;
-     z-index: 10;
-     /* MUDADO: A borda agora é superior */
-     border-right: none;
-     border-top: 1px solid #333;
-     top: auto;
-     bottom: 0;
+ @media (max-width: 480px) {
+   /* Mobile Sidebar */
+   .poll-page {
+    padding-top: 20px;
+    padding-bottom: 40px;
    }
-
+   
+   
    .poll-page .sidebar-content {
      padding: 0;
      width: 100%;
@@ -456,7 +415,7 @@
      display: none;
    }
 
-   /* Mobile Form: Ajusta o padding para compensar a sidebar inferior */
+   /* Ajusta o padding para compensar a sidebar inferior */
    .poll-page .poll-input-area {
      margin-bottom: 80px; /* Adiciona espaço para a sidebar inferior */
    }
