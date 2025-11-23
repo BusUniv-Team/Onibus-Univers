@@ -40,7 +40,7 @@ async function cadastrarUsuario(req, res) {
     // preciso salvar isso no banco de dados depois 
 
     return res.status(201).json({
-      mensagem: "Marcel deu CU e mandou pro backend!",
+      mensagem: "recebido pelo backend",
       dados: {
         nome,
         email,
