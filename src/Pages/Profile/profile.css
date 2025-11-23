@@ -1,0 +1,238 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --neon-green: #00ff2a; /* O verde brilhante da imagem */
+  --dark-bg: #050505;    /* Fundo quase preto */
+  --card-bg: #0a0a0a;    /* Fundo dos cards */
+  --border-color: #333;  /* Bordas sutis */
+}
+
+/* Wrapper geral da página de perfil */
+.profile-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--dark-bg);
+  color: white;
+  font-family: "Poppins", sans-serif;
+
+  /* EFEITO DE ESTRELAS COM CSS (Sem precisar de imagem) */
+  background-image: 
+  radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+  radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
+  background-size: 550px 550px, 350px 350px;
+  background-position: 0 0, 40px 60px;
+}
+
+
+/* Área principal */
+.main-container {
+  flex: 1;
+  padding: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Seção da foto de perfil */
+.profile-photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.profile-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ccc;
+  border: 3px solid var(--neon-green);
+  box-shadow: 0 0 15px rgba(0, 255, 42, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-change {
+  margin-top: 15px;
+  font-size: 14px;
+  color: var(--neon-green); /* Texto Verde */
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profile-change:hover {
+  text-shadow: 0 0 18px var(--neon-green); 
+}
+
+.hidden-input {
+  display: none;
+}
+
+/* Título com o nome */
+.profile-name {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  text-align: center;
+  
+  /* Efeito de brilho no texto */
+  text-shadow: 0 0 10px rgba(254, 254, 254, 0.5);
+}
+
+/* Grid dos containers */
+.profile-grid {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+
+/* Card padrão */
+.cardz {
+  background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+  radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
+  background-size: 550px 550px, 350px 350px;
+  background-position: 0 0,  60px;
+
+  padding: 30px;
+  border-radius: 20px; 
+  border: 1px solid #333; 
+  box-shadow: none; 
+  color: #e0e0e0;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.cardz:hover {
+  border-color: var(--neon-green); /* Borda fica verde ao passar o mouse */
+  transform: translateY(-2px);
+}
+
+.cardz h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.cardz p {
+  font-size: 15px;
+  margin: 8px 0;
+}
+
+
+
+.info-list p {
+  display: flex;               
+  justify-content: space-between; 
+  align-items: center;         
+  
+}
+
+/* Lista de informações */
+.info-list p strong {
+  font-weight: 600;
+}
+
+/* BARRA DE ENERGIA */
+.energy-wrapper {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.energy-bar {
+
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  margin-top: 20px;
+  background: #0f0f0f;
+  border: 2px solid var(--neon-green);
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 255, 42, 0.3);
+}
+
+.energy-cell {
+  width: 26px;
+  height: 38px;
+  background: var(--neon-green);
+  border: 2px solid #006b16;
+  box-shadow:
+    inset 0 0 8px #00ff2a,
+    0 0 10px rgba(0, 255, 42, 0.6);
+  image-rendering: pixelated;
+  border-radius: 3px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Exemplo de "energia baixa" */
+.energy-cell.off {
+  opacity: 0.15;
+}
+
+
+/* REDUZ A SIDEBAR */
+
+/* SUBSTITUA PELO NOME DO CONTAINER PRINCIPAL */
+
+@media (min-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr 1fr;
+  } /* ESSE É SÓ PARA A PÁGINA DE PERFIL */
+
+  
+.profile-wrapper .app-sidebar {
+    margin-left: -20px;
+}
+
+}
+
+/* 2. VERSÃO MOBILE (Celular)
+   Aqui a barra deve ser BAIXA e HORIZONTAL */
+@media (max-width: 767px) {
+  .profile-wrapper .app-sidebar {
+    height: auto !important;
+    min-height: 80px; 
+    width: 100%;      
+    padding-top: 10px !important;
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0 !important;
+    z-index: 1000; 
+  }
+  
+  .profile-wrapper {
+    padding-bottom: 100px; 
+  }
+
+  .info-list {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px; /* ajuste o tamanho */
+}
+}
+
+
+

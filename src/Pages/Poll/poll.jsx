@@ -1,19 +1,15 @@
 import { useState, useEffect } from 'react';
 import {
-  FaCheck,
-  FaHouse,
-  FaSquarePollHorizontal,
-  FaCircleInfo,
-  FaUser,
-  FaDesktop,
-  FaChevronRight
+  FaCheck
 } from 'react-icons/fa6';
+import Sidebar from "../../components/SideBar/Sidebar";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './poll.css';
 
 // URL base do backend
 const API_BASE_URL = 'http://localhost:3000/api/poll';
+
 
 // Função utilitária para requisições JSON
 async function jsonFetch(url, options = {}) {
@@ -42,7 +38,7 @@ async function jsonFetch(url, options = {}) {
 }
 
 function Poll() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+
 
   const [formData, setFormData] = useState({
     faculdade: "",
@@ -111,7 +107,8 @@ function Poll() {
 
     try {
       if (!isActivating) {
-        const URL_DELETE = `${API_BASE_URL}/ID_DO_USUARIO_LOGADO/dia/${dia}`;
+        const USER_ID = 1;
+        const URL_DELETE = `${API_BASE_URL}/${USER_ID}/dia/${dia}`;
         await jsonFetch(URL_DELETE, { method: 'DELETE' });
         console.log(`Voto para ${dia} removido com sucesso.`);
       }
@@ -180,7 +177,7 @@ function Poll() {
     }
   };
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+ 
 
   /* ----------------------------------------
      RETURN
@@ -188,28 +185,7 @@ function Poll() {
 
   return (
     <div className="poll-page">
-      <nav className={`poll-sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-content">
-          <ul className="sidebar-items">
-            {[
-              { icon: <FaHouse />, label: 'Início' },
-              { icon: <FaSquarePollHorizontal />, label: 'Enquete', active: true },
-              { icon: <FaCircleInfo />, label: 'Avisos' },
-              { icon: <FaUser />, label: 'Perfil' },
-              { icon: <FaDesktop />, label: 'Diretoria' }
-            ].map(({ icon, label, active }) => (
-              <li key={label} className={`sidebar-item ${active ? 'active' : ''}`}>
-                <a href="#">{icon}<span className="sidebar-description">{label}</span></a>
-              </li>
-            ))}
-          </ul>
-
-          <button className="sidebar-toggle-btn" onClick={toggleSidebar}>
-            <FaChevronRight className="sidebar-toggle-icon" />
-          </button>
-        </div>
-      </nav>
-
+      <Sidebar activePage="Enquete" />
       <main className="poll-form-container">
         <form className="poll-form" onSubmit={handleSubmit}>
           <div className="poll-input-area">
