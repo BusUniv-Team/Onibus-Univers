@@ -67,7 +67,7 @@ function Poll() {
 
     fetchPollData(); // primeira chamada
 
-    const interval = setInterval(fetchPollData, 30000);
+    const interval = setInterval(fetchPollData, 10000);
 
     return () => clearInterval(interval);
   }, []);
