@@ -18,7 +18,7 @@ function Sidebar() {
   const location = useLocation();
 
   const menuItems = [
-    { icon: <FaHouse />, label: 'Início', link: '/' },
+    { icon: <FaHouse />, label: 'inicio', link: '/inicio' },
     { icon: <FaSquarePollHorizontal />, label: 'Enquete', link: '/Poll' },
     { icon: <FaCircleInfo />, label: 'Avisos', link: '/' },
     { icon: <FaUser />, label: 'Perfil', link: '/Profile' },
