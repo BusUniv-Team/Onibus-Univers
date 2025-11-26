@@ -4,58 +4,104 @@
 
 // backend/controllers/cadastroController.js
 // controllers/cadastroController.js
+// controllers/cadastroController.js
 const bcrypt = require('bcrypt');
+const pool = require('../config/database'); // caso precise direto aqui
 const { criarUsuario } = require('../models/usuario');
 
+function normalizeCpf(cpf) {
+  return String(cpf || '').replace(/[^\d]/g, '');
+}
+
 async function cadastrarUsuario(req, res) {
+  // debug inicial
+  console.log('--- NOVA REQ - timestamp:', new Date().toISOString());
+  console.log('Headers:', req.headers['content-type']);
+  console.log('Body (raw keys):', typeof req.body, Object.keys(req.body || {}));
+  console.log('Body (full):', req.body);
+  if (req.file) {
+    console.log('File recebido:', {
+      fieldname: req.file.fieldname,
+      originalname: req.file.originalname,
+      filename: req.file.filename,
+      mimetype: req.file.mimetype,
+      size: req.file.size
+    });
+  } else {
+    console.log('Nenhum arquivo (req.file === undefined)');
+  }
+
   try {
     const {
-      nome, email, cpf, semestre, turno, faculdade, telefone, curso, /* senha não vem no front */ 
+      nome, email, cpf, semestre, turno, faculdade, telefone, curso
     } = req.body;
 
     if (!nome || !cpf || !email) {
-      return res.status(400).json({ mensagem: "Campos obrigatórios faltando" });
+      return res.status(400).json({ mensagem: "Nome, email e CPF obrigatórios" });
     }
 
-    // comprovação enviado via multer
     if (!req.file) {
       return res.status(400).json({ mensagem: "Comprovante (PDF) obrigatório" });
     }
 
-    const comprovante = req.file.path; // ex: uploads/xxx.pdf
+    // normaliza CPF
+    const cpfNorm = normalizeCpf(cpf);
+    if (cpfNorm.length < 11) {
+      return res.status(400).json({ mensagem: "CPF inválido" });
+    }
 
-    // senha padrão = cpf para alunos (cargo default = aluno)
-    const senhaHash = await bcrypt.hash(cpf, 10);
+    // checar duplicado corretamente no banco (normalizando também)
+    const [existing] = await pool.execute(
+      `SELECT id_us FROM usuario
+       WHERE REPLACE(REPLACE(REPLACE(CPF, '.', ''), '-', ''), ' ', '') = ?`,
+      [cpfNorm]
+    );
+
+    if (existing.length > 0) {
+      return res.status(400).json({ mensagem: "CPF já cadastrado" });
+    }
+
+    // montar dados para inserir
+    const comprovante = req.file.path; // caminho do arquivo salvo pelo multer
+    const senhaHash = await bcrypt.hash(cpfNorm, 10); // senha = CPF normalizado
 
     const dados = {
-      nome, email, cpf,
+      nome,
+      email,
+      cpf: cpfNorm,
       semestre: semestre ? Number(semestre) : null,
-      turno, comprovante, faculdade, telefone,
-      cargo: 'aluno', // padrão
+      turno,
+      comprovante,
+      faculdade,
+      telefone,
+      cargo: 'aluno',
       curso,
       senhaHash
     };
 
     const novoId = await criarUsuario(dados);
 
-    // Retorna 201 e orienta o front a redirecionar para /login
     return res.status(201).json({
       mensagem: "Usuário criado com sucesso",
       id: novoId,
-      redirect: "/login"   // campo que o front pode usar para redirecionar
+      redirect: "/login"
     });
 
-  } catch (err) {
-    if (err.code === 'ER_DUP_ENTRY' || err.message === 'CPF_DUPLICADO') {
+  }   catch (err) {
+    console.error('❌ Erro no cadastrarUsuario:', err && (err.stack || err));
+
+    if (err && (err.code === 'ER_DUP_ENTRY' || err.message === 'CPF_DUPLICADO' || err.message === 'DUPLICATE')) {
+      // se o model passou qual chave duplicou, usamos essa informação
+      if (err.dupKey && err.dupKey.toLowerCase().includes('email')) {
+        return res.status(400).json({ mensagem: "Email já cadastrado" });
+      }
       return res.status(400).json({ mensagem: "CPF já cadastrado" });
     }
-    console.error(err);
-    return res.status(500).json({ mensagem: "Erro interno" });
+
+    return res.status(500).json({ mensagem: "Erro interno ao processar cadastro." });
   }
+
 }
 
 module.exports = { cadastrarUsuario };
 
-module.exports = {
-  cadastrarUsuario,
-};
