@@ -29,11 +29,13 @@ function Cadastro() {
 
     const { nome, turno, faculdade, curso, cpf, telefone, email, periodo } = form;
 
+    // 1. Validação simples
     if (!nome || !turno || !faculdade || !curso || !cpf || !telefone || !email || !periodo || !comprovante) {
       setMessage({ type: "error", text: "Preencha todos os campos e envie o PDF!" });
       return;
     }
 
+    // 2. Validação do período
     const periodoNum = Number(periodo);
     if (isNaN(periodoNum) || periodoNum < 1 || periodoNum > 12) {
       setMessage({ type: "error", text: "Período deve ser um número de 1 a 12" });
@@ -160,6 +162,7 @@ return (
 
           <span className="home-file-btn">Anexar</span>
 
+          {/* Curso */}
           <input
             type="file"
             className="home-file-input"
