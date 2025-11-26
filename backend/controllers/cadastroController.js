@@ -3,70 +3,58 @@
 // const { criarUsuario } = require("../models/usuario");
 
 // backend/controllers/cadastroController.js
-const bcrypt = require("bcrypt");
-const path = require("path");
-const { criarUsuario } = require("../models/usuario");
+// controllers/cadastroController.js
+const bcrypt = require('bcrypt');
+const { criarUsuario } = require('../models/usuario');
 
 async function cadastrarUsuario(req, res) {
   try {
     const {
-      nome,
-      email,
-      cpf,
-      semestre,
-      turno,
-      faculdade,
-      telefone,
-      curso,
-      senha,
+      nome, email, cpf, semestre, turno, faculdade, telefone, curso, /* senha não vem no front */ 
     } = req.body;
 
-    console.log("📥 Dados recebidos do frontend (cadastro):", req.body);
-
-    if (!nome || !email || !cpf || !senha) {
-      return res.status(400).json({ mensagem: "Nome, email, CPF e senha são obrigatórios." });
+    if (!nome || !cpf || !email) {
+      return res.status(400).json({ mensagem: "Campos obrigatórios faltando" });
     }
 
-    // req.file vem do multer
+    // comprovação enviado via multer
     if (!req.file) {
-      return res.status(400).json({ mensagem: "Comprovante (PDF) é obrigatório." });
+      return res.status(400).json({ mensagem: "Comprovante (PDF) obrigatório" });
     }
 
-    // monta caminho relativo que vai pro banco (ex: uploads/16912345-Oficio.pdf)
-    const comprovantePath = path.join("uploads", req.file.filename);
+    const comprovante = req.file.path; // ex: uploads/xxx.pdf
 
-    // hash da senha
-    const senhaHash = await bcrypt.hash(senha, 10);
+    // senha padrão = cpf para alunos (cargo default = aluno)
+    const senhaHash = await bcrypt.hash(cpf, 10);
 
-    const dadosParaCriar = {
-      nome,
-      email,
-      cpf,
+    const dados = {
+      nome, email, cpf,
       semestre: semestre ? Number(semestre) : null,
-      turno,
-      comprovante: comprovantePath, // <- string salva no DB
-      faculdade,
-      telefone,
-      cargo: "aluno",
+      turno, comprovante, faculdade, telefone,
+      cargo: 'aluno', // padrão
       curso,
-      senhaHash,
+      senhaHash
     };
 
-    // DEBUG: mostrar os valores que vamos inserir
-    console.log("DEBUG -> valores para inserir:", dadosParaCriar);
+    const novoId = await criarUsuario(dados);
 
-    const novoId = await criarUsuario(dadosParaCriar);
-
+    // Retorna 201 e orienta o front a redirecionar para /login
     return res.status(201).json({
       mensagem: "Usuário criado com sucesso",
       id: novoId,
-      comprovante: comprovantePath
+      redirect: "/login"   // campo que o front pode usar para redirecionar
     });
-  } catch (error) {
-    console.error("❌ Erro no cadastrarUsuario:", error);
-    return res.status(500).json({ mensagem: "Erro interno ao processar cadastro." });
+
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY' || err.message === 'CPF_DUPLICADO') {
+      return res.status(400).json({ mensagem: "CPF já cadastrado" });
+    }
+    console.error(err);
+    return res.status(500).json({ mensagem: "Erro interno" });
   }
 }
+
+module.exports = { cadastrarUsuario };
 
 module.exports = {
   cadastrarUsuario,
