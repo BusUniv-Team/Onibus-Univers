@@ -44,27 +44,10 @@ function Cadastro() {
     setMessage({ type: "success", text: "Cadastro pronto para envio (simulação)." });
     setLoading(true);
     try {
-      const resposta = await fetch(
-        "http://localhost:3001/api/usuarios/cadastrar",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", 
-          },
-          body: JSON.stringify({
-            nome,
-            turno,
-            faculdade,
-            curso,
-            cpf,
-            telefone,
-            email,
-            periodo: periodoNum,
-            // tem que configurar pra mandar pdf, por enquanto ta mandando so dados
-            // fiz algumas alterações aqui no frontend para poder facilitar no back
-          }),
-        }
-      );
+      const resposta = await fetch("http://localhost:3001/api/usuarios/cadastrar", {
+      method: "POST",
+      body: formData, // 👈 Não coloque headers
+    });
 
       const data = await resposta.json();
       console.log("🔁 Resposta do backend:", data);
