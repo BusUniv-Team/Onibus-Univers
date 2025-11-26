@@ -6,6 +6,7 @@ import Profile from "./Pages/Profile/profile.jsx";
 import Home from "./Pages/Cadastro/index.jsx";
 import Login from "./Pages/Login/login.jsx";
 import Inicio from "./Pages/Inicio/inicio.jsx";
+import Aviso from "./Pages/Aviso/aviso.jsx";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
       <Route path="/poll" element={<Poll />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/inicio" element={<Inicio />} />
+      <Route path="/aviso" element={<Aviso />} />
     </Routes>
   );
 }

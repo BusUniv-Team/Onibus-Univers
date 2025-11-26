@@ -10,6 +10,7 @@ import Poll from "./Pages/Poll/poll.jsx";
 import Login from "./Pages/Login/login.jsx";
 import Inicio from "./Pages/Inicio/inicio.jsx";
 import Cadastro from "./Pages/Cadastro/index.jsx";
+import Aviso from "./Pages/Aviso/aviso.jsx";
 
 
 createRoot(document.getElementById("root")).render(
