@@ -1,0 +1,344 @@
+/* Importa a fonte caso não esteja global */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* Variáveis locais para garantir o tema (mesmas da enquete) */
+:root {
+  --cor-fundo: #000000;
+  --cor-neon: #39FF14;
+  --cor-texto: #FFFFFF;
+  --card-bg: rgba(20, 20, 20, 0.9);
+  --brilho-fraco: 0 0 10px rgba(57, 255, 20, 0.2);
+  --brilho-forte: 0 0 20px rgba(57, 255, 20, 0.6);
+}
+
+.inicio-container {
+  /* Configuração do Background */
+  background-image: url("../../assets/fundo5.jpg"); /* Sua imagem aqui */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  
+  width: 100%;
+  height: 100vh; /* Ocupa toda a altura */
+  overflow: hidden; /* Evita rolagem desnecessária */
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-texto);
+  font-family: "Poppins", sans-serif;
+}
+
+.dashboard-title {
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--cor-neon);
+  text-shadow: var(--brilho-forte);
+  z-index: 2;
+}
+
+/* Container que segura os 3 cards */
+.cards-wrapper {
+  display: flex;
+  justify-content: space-evenly; /* Distribui espaço igual entre eles */
+  align-items: center; /* Alinha no centro verticalmente */
+  width: 100%;
+  height: 100%; /* Usa toda a altura disponível */
+  padding: 0 20px;
+}
+
+/* --- ESTILO DO CARD (TOTALMENTE TRANSPARENTE) --- */
+.bus-card {
+  position: relative; 
+  height: 70vh; 
+  width: 30%; 
+  max-width: 380px;
+  
+  /* IMPORTANTE: Remove qualquer fundo ou borda para não ficar preto */
+  background: transparent; 
+  border: none; 
+  box-shadow: none;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* Efeito de hover no card */
+.bus-card:hover {
+  transform: translateY(-10px);
+  /* Em vez de borda quadrada, usa um brilho que segue o formato da imagem */
+  filter: drop-shadow(0 0 30px rgba(57, 255, 20, 1));
+  border: none;
+}
+/* Card do Meio (Destaque opcional) */
+.center-card {
+  width: 340px; /* Um pouco maior */
+  border-color: rgba(57, 255, 20, 0.5);
+  box-shadow: var(--brilho-fraco);
+}
+
+/* Área da Imagem */
+.card-image-container {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-bottom: 1px solid #9b1414;
+}
+
+.card-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem preencha sem distorcer */
+  transition: transform 0.5s ease;
+}
+
+.bus-card:hover .card-image-container img {
+  transform: scale(1.1); /* Zoom suave na imagem ao passar o mouse */
+}
+
+/* Área de Conteúdo */
+.card-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.bus-name {
+  color: var(--cor-neon);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+/* Grid dos números (Ida, Volta, Ambos) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Item "Ida e Volta" ocupa a largura total embaixo */
+.stat-item.destaque {
+  grid-column: span 2;
+  background: rgba(221, 216, 216, 0.1);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 1024px) {
+  .cards-wrapper {
+    flex-wrap: wrap; /* Quebra linha se não couber */
+  }
+  
+  .inicio-container {
+    height: auto;
+    padding: 50px 0;
+    overflow-y: auto; /* Permite rolar no mobile */
+  }
+}
+
+/* Isso faz a imagem preencher 100% do card sem distorcer */
+.card-img-full {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  display: block;
+
+  /* ADICIONE ESSA LINHA PARA ARREDONDAR AS BORDAS */
+  border-radius: 15px; 
+}
+
+
+/* =======================================================
+   [NOVO] CSS DOS NÚMEROS - APENAS ISSO FOI ADICIONADO
+   ======================================================= */
+
+.stats-overlay {
+    position: absolute;
+    bottom: 16%; /* Aumente esse número para subir os zeros */
+    left: 0;
+    width: 100%;
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20 10px;
+}
+
+.stat-number {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.6rem; /* Tamanho do zero */
+    font-weight: 800;
+    color: #fff; 
+    text-shadow: 0 2px 5px rgba(0,0,0,1); /* Sombra preta pra ler melhor */
+    
+    width: 33%; /* Cada número ocupa 1/3 do espaço */
+    text-align: center;
+}
+
+/* --- [NOVO] POSIÇÃO DO NOME (MOTORISTA/LINHA) --- */
+.driver-name {
+    position: absolute;
+    /* 38% de altura deve cair exatamente no retângulo vermelho que você marcou */
+    bottom: 32%; 
+    left: 0;
+    width: 100%;
+    
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.3rem; /* Tamanho do texto */
+    font-weight: 600;
+    color: #ffffff; /* Verde Neon para destacar */
+    text-shadow: 0 2px 4px rgb(0, 0, 0); /* Sombra preta */
+    z-index: 10;
+    padding: 0 15px;
+}
+
+/* --- IMAGEM DO ÔNIBUS (SOBREPOSTA) --- */
+.bus-icon-overlay {
+    position: absolute;
+    
+    /* Ajuste aqui: Isso define a altura da imagem no card */
+    top: 25%; 
+    
+    /* Centraliza horizontalmente */
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Tamanho da imagem do ônibus */
+    width: 280px; /* Ajuste o tamanho conforme sua imagem */
+    height: auto; /* Mantém a proporção */
+    
+    z-index: 5; 
+    /* Sombra para destacar do fundo */
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.8));
+}
+
+
+
+@media (max-width: 1024px) {
+  .inicio-container {
+    /* Ajuste para centralizar na tela do celular */
+    height: 100vh; 
+    overflow: hidden; 
+    padding: 0;
+    justify-content: center;
+  }
+
+  .cards-wrapper {
+    /* Força ficar lado a lado */
+    flex-direction: row; 
+    gap: 5px; /* Espaço mínimo */
+    padding: 0 5px;
+    align-items: center;
+  }
+
+  .bus-card {
+    /* Cada card ocupa um terço da tela */
+    width: 30%; 
+    height: 35vh; /* Altura menor para não esticar demais */
+    max-width: none;
+  }
+
+  /* --- REDUZINDO TUDO PARA CABER --- */
+  
+  /* Ícone do ônibus minúsculo */
+  .bus-icon-overlay {
+    width: 70px; 
+    top: 35%;
+  }
+
+  /* Nome bem pequeno */
+  .driver-name {
+    font-size: 0.6rem; 
+    bottom: 35%;
+    line-height: 1.1;
+    padding: 0 2px;
+  }
+
+  /* Zeros pequenos */
+  .stats-overlay {
+    bottom: 15%; 
+    padding: 0;
+  }
+  
+  .stat-number {
+    font-size: 0.8rem; 
+  }
+  
+  /* Arruma a Sidebar no mobile */
+  .app-sidebar-wrapper {
+    flex-direction: column; 
+  }
+  
+}
+/* --- EFEITO DE "PRESSIONAR" NO MOBILE (ACTIVE) --- */
+  /* Isso faz o card crescer enquanto você segura o dedo */
+  
+ /* --- O SEGREDO PARA IR PRO MEIO (CENTRALIZAR) --- */
+  .bus-card:active {
+    /* 1. Tira da lista e solta na tela */
+    position: fixed; 
+    
+    /* 2. Manda o canto superior esquerdo pro meio */
+    top: 50%;
+    left: 50%;
+    
+    /* 3. Puxa de volta metade do tamanho para centralizar PERFEITAMENTE */
+    transform: translate(-50%, -50%) scale(1.2) !important;
+    
+    /* 4. Define um tamanho grande para ver bem */
+    width: 66vw !important;  
+    height: 70vh !important; 
+    max-width: 400px;
+    
+    /* Visual do Fundo */
+    z-index: 9999; /* Fica na frente de tudo */
+    background-color: rgba(0,0,0,0.95); /* Fundo preto quase total */
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.8);
+    margin: 0;
+  }
+
+  /* AJUSTA OS ITENS DE DENTRO PARA FICAREM GRANDES TAMBÉM */
+  .bus-card:active .bus-icon-overlay {
+    width: 210px; 
+    top: 20%;
+  }
+  .bus-card:active .driver-name {
+    font-size: 1.0rem; 
+    bottom: 28%;
+  }
+  .bus-card:active .stats-overlay {
+    bottom: 17%;
+  }
+  .bus-card:active .stat-number {
+    font-size: 1.3rem; 
+  }
