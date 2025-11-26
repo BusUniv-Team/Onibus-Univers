@@ -1,408 +1,428 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-/* --- Estilos Globais e Reset --- */
-.poll-page * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-
 .poll-page {
-  background-color: #001a00;
-  width: 100%;
+  background-color: var(--cor-fundo); 
+  background-image: url("../../assets/galaxy2.jpg");
+  background-size: cover;       
+  background-position: center;  
+  background-attachment: fixed; 
   min-height: 100vh;
   display: flex;
 }
 
-/* WRAPPER PARA ISOLAR (mantido) */
-.poll-page {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-}
+  /* =============== VARIÁVEIS DE CORES E EFEITOS =============== */
+ :root {
+   /* A paleta de cores "Dark Neon" */
+   --cor-fundo: #000000;
+   --cor-texto-principal: #FFFFFF;
+   --cor-neon-destaque: #39FF14;
 
-/* =============== SIDEBAR  =============== */
+   /* Efeitos de Brilho (Glow) */
+   --brilho-neon-pequeno: 0 0 26px var(--cor-neon-destaque);
+   --brilho-neon-medio: 0 0 12px 3px var(--cor-neon-destaque);
+ }
 
-.poll-page .poll-sidebar {
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  height: 100vh;
-  border-radius: 0 18px 18px 0;
-  position: fixed;
-  top: 0;
-  min-width: 82px;
-  transition: all 0.4s ease;
-  z-index: 10;
-}
+ /* --- Estilos Globais e Reset --- */
+ .poll-page * {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: "Poppins", sans-serif;
 
-.poll-page .sidebar-content {
-  padding: 12px;
-}
+ }
 
-.poll-page .sidebar-items {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  list-style: none;
-}
+ .poll-page {
+   background-color: var(--cor-fundo);
+   width: 100%;
+   min-height: 100vh;
+   display: block !important;
+   position: relative;
+   overflow-x: hidden; 
+ }
 
-.poll-page .sidebar-item {
-  border-radius: 8px;
-  padding: 12px;
-  cursor: pointer;
-  text-align: center;
-  transition: background-color 0.3s ease;
-}
+ /* =============== SIDEBAR =============== */
 
-.poll-page .sidebar-item.active {
-  background-color: rgb(72, 119, 0);
-}
+ .poll-page .sidebar-content {
+   padding: 12px;
+ }
 
-.poll-page .sidebar-item:hover:not(.active) {
-  background-color: rgba(155, 255, 4, 0.319);
-}
+ .poll-page .sidebar-item {
+   border-radius: 8px;
+   padding: 12px;
+   cursor: pointer;
+   text-align: center;
+   transition: background-color 0.3s ease;
+ }
 
-.poll-page .sidebar-item a {
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #0a0a0a;
-  gap: 10px;
-}
+ .poll-page .sidebar-item.active {
+   /* MUDADO: Fundo ativo para neon */
+   background-color: var(--cor-neon-destaque);
+   /* ADICIONADO: Brilho neon */
+   box-shadow: var(--brilho-neon-medio);
+ }
 
-.poll-page .sidebar-item.active a {
-  color: #fefefe;
-}
+ .poll-page .sidebar-item:hover:not(.active) {
+   /* MUDADO: Hover para neon transparente */
+   background-color: rgba(57, 255, 20, 0.1);
+ }
 
-.poll-page .sidebar-toggle-btn {
-  position: absolute;
-  top: 30px;
-  right: -10px;
-  background-color: rgb(72, 119, 0);
-  color: #ffffff;
-  border-radius: 100%;
-  width: 22px;
-  height: 22px;
-  border: none;
-  cursor: pointer;
-}
+ .poll-page .sidebar-toggle-btn {
+   position: absolute;
+   top: 30px;
+   right: -10px;
+   background-color: var(--cor-neon-destaque);
+   color: var(--cor-fundo);
+   border-radius: 100%;
+   width: 22px;
+   height: 22px;
+   border: none;
+   cursor: pointer;
+ }
+ 
+ .poll-page .sidebar-toggle-icon {
+   transition: transform 0.3s ease;
+ }
+ .poll-page .open .sidebar-toggle-icon {
+   transform: rotate(180deg);
+ }
+ .poll-page .sidebar-description {
+   width: 0px;
+   overflow: hidden;
+   white-space: nowrap;
+   transition: width 0.6s;
+   font-size: 14px;
+   height: 0;
+ }
+ .poll-page .poll-sidebar.open .sidebar-description {
+   width: 150px;
+   height: auto;
+ }
+ .poll-page .poll-sidebar.open {
+   min-width: 15%;
+ }
+ 
+ /* =============== FORM CONTAINER =============== */
 
-.poll-page .sidebar-toggle-icon {
-  transition: transform 0.3s ease;
-}
+ .poll-page .poll-form-container {
+   flex: 1;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   padding: 20px;
+   min-height: 100vh;
+   padding-left: calc(82px + 20px);
 
-.poll-page .open .sidebar-toggle-icon {
-  transform: rotate(180deg);
-}
+ }
 
-.poll-page .sidebar-description {
-  width: 0px;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: width 0.6s;
-  font-size: 14px;
-  height: 0;
-}
+ .poll-page .poll-input-area {
+   /* MUDADO: Fundo da área de input para preto */
+   background-color: var(--cor-fundo);
+   /* ADICIONADO: Borda para destacar */
+   border: 1px solid #023202;
+   padding: 30px;
+   width: 90%;
+   max-width: 1000px;
+   border-radius: 12px;
+   box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+   text-align: center;
+   background-image: url("../../assets/galaxy2.jpg");
+   
+ }
 
-.poll-page .poll-sidebar.open .sidebar-description {
-  width: 150px;
-  height: auto;
-}
+ .poll-page .poll-input-area h3 {
+   /* MUDADO: Cor do título para neon */
+   color: var(--cor-neon-destaque);
+   /* ADICIONADO: Brilho de texto */
+   text-shadow: var(--brilho-neon-pequeno);
+   margin-bottom: 8px;
+   margin-top: 15px;
+   font-weight: 600;
+ }
 
-.poll-page .poll-sidebar.open {
-  min-width: 15%;
-}
+ /* --- FACULDADE --- */
+ .faculdade-container {
+   display: flex;
+   justify-content: center;
+   flex-wrap: wrap;
+   gap: 10px;
+   margin-bottom: 20px;
+ }
 
-/* =============== FORM CONTAINER =============== */
+ .faculdade-card {
+   width: 250px;
+   text-align: center;
+   font-weight: 600;
+   cursor: pointer;
+   display: flex;
+   justify-content: center;
+   padding: 15px 0;
+ }
 
-.poll-page .poll-form-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  min-height: 100vh;
-  /* Garante espaço para a sidebar */
-  padding-left: calc(82px + 20px); 
+ .faculdade-card input {
+   display: none;
+ }
 
-}
+ .faculdade-card span {
+   /* MUDADO: Borda para um cinza escuro */
+   border: 2px solid #333;
+   border-radius: 10px;
+   padding: 8px 14px;
+   width: 100%;
+   /* MUDADO: Fundo para preto */
+   background: var(--cor-fundo);
+   /* MUDADO: Cor do texto para branco */
+   color: var(--cor-texto-principal);
+   transition: .2s;
+   /* MUDADO: Sombra para neon sutil */
+   box-shadow: 0 0 10px rgba(57, 255, 20, 0.1);
+ }
 
-.poll-page .poll-input-area {
-  background-color: rgba(0, 20, 10, 0.9);
-  padding: 30px;
-  width: 90%;
-  max-width: 1000px;
-  border-radius: 12px;
-  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
+ .faculdade-card span:hover {
+  border-color: var( --cor-neon-destaque); 
+  transform: translateY(-2px);
+ }
 
-.poll-page .poll-input-area h3 {
-  color:#fefefe;
-  margin-bottom: 8px;
-  margin-top: 15px;
-  font-weight: 600;
-}
+ /* Estilo ativo do botão de faculdade */
+ .faculdade-card input:checked + span {
+   /* MUDADO: Fundo para neon */
+   background: var(--cor-neon-destaque);
+   /* MUDADO: Borda para neon */
+   border-color: var(--cor-neon-destaque);
+   /* MUDADO: Cor do texto para preto (contraste) */
+   color: var(--cor-fundo);
+   /* ADICIONADO: Brilho */
+   box-shadow: var(--brilho-neon-medio);
+ }
 
-/* --- FACULDADE --- */
+ /* --- DIAS E OPÇÕES --- */
+ .dias-container {
+   display: flex;
+   justify-content: center;
+   flex-wrap: wrap;
+   gap: 18px;
+   margin-top: 20px;
+ }
 
-/* ADICIONADO: Container para alinhar os botões de faculdade */
-.faculdade-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+ .dia-card {
+   /* MUDADO: Fundo para preto */
+   background: var(--cor-fundo);
+   /* MUDADO: Borda para cinza escuro */
+   border: 2px solid #333;
+   padding: 15px;
+   border-radius: 10px;
+   width: 200px;
+   /* MUDADO: Cor do texto para branco */
+   color: var(--cor-texto-principal);
+   transition: all 0.3s ease;
+ }
 
-.faculdade-card {
-  width: 250px;
-  text-align: center;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  padding: 15px 0;
-}
+ .dia-card.active {
+   /* MUDADO: Borda ativa para neon */
+   border-color: var(--cor-neon-destaque);
+   /* MUDADO: Fundo para preto */
+   background-color: var(--cor-fundo);
+   /* MUDADO: Sombra para neon */
+   box-shadow: var(--brilho-neon-medio);
+ }
 
-.faculdade-card input {
-  display: none;
-}
+ .dia-card:hover {
+  border-color: var( --cor-neon-destaque); 
+  transform: translateY(-2px);
+ }
 
-.faculdade-card span {
-  border: 2px solid #004615;
-  border-radius: 10px;
-  padding: 8px 14px;
-  width: 100%;
-  background: #00200f;
-  color: #ffffff; 
-  transition: .2s;
-}
+ .dia-top {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   font-weight: 600;
+   margin-bottom: 15px;
+   cursor: pointer;
+ }
 
-/* Estilo ativo do botão de faculdade */
-.faculdade-card input:checked + span {
-  background: #00872d;
-  border-color: #00872d;
-  color: #fff;
-}
+ /* Estilização do Checkbox no header do dia */
+ .dia-top input[type="checkbox"] {
+   appearance: none;
+   -webkit-appearance: none;
+   width: 18px;
+   height: 18px;
+   /* MUDADO: Borda do checkbox para neon */
+   border: 2px solid var(--cor-neon-destaque);
+   border-radius: 4px;
+   background-color: transparent;
+   display: grid;
+   place-content: center;
+   transition: all 0.2s ease;
+   flex-shrink: 0;
+   cursor: pointer;
+ }
 
+ /* Estilo do checkbox customizado quando checado */
+ .dia-top input[type="checkbox"]:checked {
+   /* MUDADO: Fundo checado para neon */
+   background-color: var(--cor-neon-destaque);
+   border-color: var(--cor-neon-destaque);
+ }
 
-/* --- DIAS E OPÇÕES --- */
+ .dia-top input[type="checkbox"]:checked::before {
+   content: "✔";
+   font-size: 14px;
+   /* MUDADO: Cor do "check" para preto (contraste) */
+   color: var(--cor-fundo);
+ }
 
-/* Container dos dias */
-.dias-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 18px;
-  margin-top: 20px;
-}
+ /* Grupos internos de Turno e Trajeto */
+ .turno-group,
+ .trajeto-group {
+   padding-top: 10px;
+   /* MUDADO: Separador para neon transparente */
+   border-top: 1px solid rgba(57, 255, 20, 0.2);
+   margin-top: 10px;
+ }
+ .turno-group {
+   border-top: none;
+ }
 
-.dia-card {
-  background: #00200f;
-  border: 2px solid #004615;
-  padding: 15px;
-  border-radius: 10px;
-  width: 200px;
-  color: #fff;
-  transition: all 0.3s ease;
-}
+ .turno-group label,
+ .trajeto-group label {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   margin: 6px 0;
+   cursor: pointer;
+   font-size: 14px;
+ }
 
-.dia-card.active {
-  border-color: #00872d;
-  background-color: #002d13;
-  box-shadow: 0 0 10px rgba(0, 135, 45, 0.5);
-}
+ /* Estilização dos Radio Buttons customizados */
+ .turno-group input[type="radio"],
+ .trajeto-group input[type="radio"] {
+   appearance: none;
+   -webkit-appearance: none;
+   width: 14px;
+   height: 14px;
+   /* MUDADO: Borda do radio para neon */
+   border: 2px solid var(--cor-neon-destaque);
+   border-radius: 50%;
+   background-color: transparent;
+   display: grid;
+   place-content: center;
+   transition: all 0.2s ease;
+   flex-shrink: 0;
+   cursor: pointer;
+ }
 
-.dia-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  cursor: pointer; 
-}
+ /* Estilo do rádio customizado quando checado */
+ .turno-group input[type="radio"]:checked,
+ .trajeto-group input[type="radio"]:checked {
+   border-color: var(--cor-neon-destaque);
+ }
 
-/* Estilização do Checkbox no header do dia */
-.dia-top input[type="checkbox"] {
-  appearance: none; 
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #06a104;
-  border-radius: 4px;
-  background-color: transparent;
-  display: grid;
-  place-content: center;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  cursor: pointer;
-}
+ .turno-group input[type="radio"]:checked::before,
+ .trajeto-group input[type="radio"]:checked::before {
+   content: "";
+   width: 6px;
+   height: 6px;
+   border-radius: 50%;
+   /* MUDADO: Preenchimento do radio para neon */
+   background-color: var(--cor-neon-destaque);
+   transition: all 0.2s ease;
+ }
 
-/* Estilo do checkbox customizado quando checado */
-.dia-top input[type="checkbox"]:checked {
-  background-color: #00872d;
-  border-color: #00872d;
-}
+ .disabled {
+   opacity: 0.4;
+   pointer-events: none;
+ }
 
-.dia-top input[type="checkbox"]:checked::before {
-  content: "✔";
-  font-size: 14px;
-  color: #fff;
-}
+ .poll-page .poll-submit-btn {
+   /* MUDADO: Botão de enviar para neon */
+   background-color: var(--cor-neon-destaque);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border: none;
+   padding: 10px 14px;
+   border-radius: 8px;
+   font-size: 15px;
+   font-weight: 500;
+   /* MUDADO: Cor do texto para preto (contraste) */
+   color: var(--cor-fundo);
+   cursor: pointer;
+   gap: 8px;
+   margin-top: 50px;
+   transition: all 0.3s ease;
+   width: fit-content;
+   margin-left: auto;
+   margin-right: auto;
+   /* ADICIONADO: Brilho neon */
+   box-shadow: var(--brilho-neon-medio);
+ }
 
-/* Grupos internos de Turno e Trajeto */
-.turno-group,
-.trajeto-group {
-    padding-top: 10px; /* Adiciona espaçamento entre os grupos */
-    border-top: 1px solid rgba(0, 135, 45, 0.2); /* Separador visual */
-    margin-top: 10px;
-}
-.turno-group {
-    border-top: none; 
-}
+ .poll-page .poll-submit-btn:hover {
+   /* MUDADO: Hover do botão (levemente mais claro ou mais brilho) */
+   background-color: #39FF14; /* Mantém a cor */
+   /* ADICIONADO: Brilho mais intenso no hover */
+   box-shadow: 0 0 25px 5px var(--cor-neon-destaque);
+ }
 
-.turno-group label,
-.trajeto-group label {
-  display: flex;
-  align-items: center;
-  gap: 8px; 
-  margin: 6px 0; 
-  cursor: pointer;
-  font-size: 14px; 
-}
+ /*  RESPONSIVO  */
 
-/* Estilização dos Radio Buttons customizados */
-.turno-group input[type="radio"],
-.trajeto-group input[type="radio"] {
-  /* Esconde o rádio nativo */
-  appearance: none;
-  -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  border: 2px solid #06a104;
-  border-radius: 50%;
-  background-color: transparent;
-  display: grid;
-  place-content: center;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  cursor: pointer;
-}
+ @media (max-width: 480px) {
+   /* Mobile Sidebar */
+   .poll-page {
+    padding-top: 20px;
+    padding-bottom: 40px;
+   }
+   
+   
+   .poll-page .sidebar-content {
+     padding: 0;
+     width: 100%;
+     height: 100%;
+     display: flex;
+     align-items: center;
+     justify-content: space-around;
+   }
 
-/* Estilo do rádio customizado quando checado */
-.turno-group input[type="radio"]:checked,
-.trajeto-group input[type="radio"]:checked {
-  border-color: #00872d;
-}
+   .poll-page .sidebar-items {
+     flex-direction: row;
+     justify-content: space-around;
+     width: 100%;
+     gap: 0;
+     height: 100%;
+     padding: 0 10px;
+   }
 
-.turno-group input[type="radio"]:checked::before,
-.trajeto-group input[type="radio"]:checked::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #00872d;
-  transition: all 0.2s ease;
-}
+   .poll-page .sidebar-item {
+     height: 100%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 8px;
+   }
+   .poll-page .sidebar-item a {
+     flex-direction: column;
+     gap: 4px;
+     justify-content: center;
+   }
 
-.disabled {
-  opacity: 0.4;
-  pointer-events: none;
-}
+   .poll-page .sidebar-description {
+     width: auto;
+     height: auto;
+     font-size: 10px;
+   }
 
-.poll-page .poll-submit-btn {
-  background-color: #00872d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #ffffff;
-  cursor: pointer;
-  gap: 8px;
-  margin-top: 50px;
-  transition: background-color 0.3s ease;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-}
+   .poll-page .sidebar-toggle-btn {
+     display: none;
+   }
 
-.poll-page .poll-submit-btn:hover {
-  background-color: rgb(128, 192, 31);
-}
+   /* Ajusta o padding para compensar a sidebar inferior */
+   .poll-page .poll-input-area {
+     margin-bottom: 80px; /* Adiciona espaço para a sidebar inferior */
+   }
 
-/* =============== RESPONSIVO (Ajustado) =============== */
+   .poll-page .poll-form-container {
+     padding-left: 50px; /* Remove o padding extra da sidebar lateral */
+   }
+ }
 
-@media (max-width: 768px) {
-  /* Mobile Sidebar: Muda de lateral para inferior */
-  .poll-page .poll-sidebar {
-    flex-direction: row;
-    height: 60px;
-    width: 100%;
-    border-radius: 0;
-    justify-content: space-around;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 10;
-  }
-  
-  .poll-page .sidebar-content {
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-
-  .poll-page .sidebar-items {
-    flex-direction: row;
-    justify-content: space-around;
-    width: 100%;
-    gap: 0;
-    height: 100%;
-    padding: 0 10px;
-  }
-  
-  .poll-page .sidebar-item {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-  }
-  .poll-page .sidebar-item a {
-    flex-direction: column;
-    gap: 4px;
-    justify-content: center;
-  }
-
-  .poll-page .sidebar-description {
-    width: auto;
-    height: auto;
-    font-size: 10px;
-  }
-  
-  .poll-page .sidebar-toggle-btn {
-    display: none;
-  }
-
-  /* Mobile Form: Ajusta o padding para compensar a sidebar inferior */
-  .poll-page .poll-input-area {
-    margin-bottom: 80px; /* Adiciona espaço para a sidebar inferior */
-  }
-
-  .poll-page .poll-form-container {
-    padding-left: 20px; /* Remove o padding extra da sidebar lateral */
-  }
-}
+ 
