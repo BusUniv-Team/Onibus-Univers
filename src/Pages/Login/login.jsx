@@ -1,32 +1,56 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import fundo from "../../assets/fundo.jpg";
 import "./login.css";
 
 export default function Login() {
-  const [usuario, setUsuario] = useState("");
+  const [usuario, setUsuario] = useState(""); // aqui o "usuario" será o CPF
   const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
+    if (!usuario || !senha) {
+      setError("Preencha CPF e senha.");
+      return;
+    }
+
+    setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/login", {
+      // ponto importante: backend que usamos no exemplo é em 3001 e rota /auth/login
+      // se o seu backend estiver em outra porta/rota, ajuste aqui
+      const response = await fetch("http://localhost:3001/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ usuario, senha }),
+        // enviamos CPF como "cpf" — o backend espera { cpf, senha }
+        body: JSON.stringify({ cpf: usuario, senha }),
       });
 
-      if (response.ok) {
-        alert("Login realizado com sucesso!");
-      } else {
-        alert("Usuário ou senha incorretos!");
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setError(data.mensagem || data.error || "CPF ou senha inválidos.");
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Erro ao conectar com o servidor:", error);
-      alert("Erro ao tentar fazer login. Tente novamente.");
+
+      // salvar token e info do usuário
+      if (data.token) localStorage.setItem("token", data.token);
+      if (data.usuario) localStorage.setItem("usuario", JSON.stringify(data.usuario));
+
+      // redirecionar para /inicio
+      navigate("/inicio");
+    } catch (err) {
+      console.error("Erro ao conectar com o servidor:", err);
+      setError("Erro de conexão com o servidor.");
+    } finally {
+      setLoading(false);
     }
   };
-
   return (
     <div
       className="container-login"

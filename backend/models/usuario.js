@@ -1,7 +1,5 @@
 // queries com pool.execute
 // backend/models/usuario.js
-// backend/src/models/usuario.js
-// models/usuario.js
 // models/usuario.js
 const pool = require('../config/database');
 
@@ -43,5 +41,23 @@ async function criarUsuario(dados) {
 }
 
 module.exports = { criarUsuario };
+
+
+// busca de users por CPF
+
+async function buscarUsuarioPorCPF(cpf) {
+    try {
+        const sql = "SELECT * FROM usuarios WHERE cpf = ?";
+        const [rows] = await db.execute(sql, [cpf]);
+        return rows[0];
+    } catch (error) {
+        throw error;
+    }
+}
+
+module.exports = {
+    criarUsuario,
+    buscarUsuarioPorCPF
+};
 
 
