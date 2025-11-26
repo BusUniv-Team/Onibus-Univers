@@ -32,9 +32,23 @@ async function cadastrarUsuario(req, res) {
   }
 
   try {
-    const {
-      nome, email, cpf, semestre, turno, faculdade, telefone, curso
-    } = req.body;
+    // pegar campos do body
+    let { nome, email, cpf, turno, faculdade, telefone, curso, periodo, semestre } = req.body;
+
+    // O front envia "periodo", mas o backend usa "semestre"
+    // então pegamos o que vier:
+    const semestreRaw = periodo ?? semestre;
+
+    // validação para garantir que nunca é null
+    if (!semestreRaw) {
+      return res.status(400).json({ mensagem: "Semestre/Período é obrigatório" });
+    }
+
+    const semestreNum = Number(semestreRaw);
+    if (isNaN(semestreNum) || semestreNum < 1 || semestreNum > 12) {
+      return res.status(400).json({ mensagem: "Semestre inválido. Deve ser um número entre 1 e 12." });
+    }
+
 
     if (!nome || !cpf || !email) {
       return res.status(400).json({ mensagem: "Nome, email e CPF obrigatórios" });
@@ -69,7 +83,7 @@ async function cadastrarUsuario(req, res) {
       nome,
       email,
       cpf: cpfNorm,
-      semestre: semestre ? Number(semestre) : null,
+      semestre: semestreNum,
       turno,
       comprovante,
       faculdade,
@@ -87,7 +101,7 @@ async function cadastrarUsuario(req, res) {
       redirect: "/login"
     });
 
-  }   catch (err) {
+  } catch (err) {
     console.error('❌ Erro no cadastrarUsuario:', err && (err.stack || err));
 
     if (err && (err.code === 'ER_DUP_ENTRY' || err.message === 'CPF_DUPLICADO' || err.message === 'DUPLICATE')) {
