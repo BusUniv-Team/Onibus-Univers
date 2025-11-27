@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./diretoria.css";
 import Sidebar from "../../components/SideBar/Sidebar";
 
-// Senha estática de exemplo. Em um app real, isso usaria um backend/autenticação.
+// URL para salvar as rotas
+const API_ROTA_SALVAR = 'http://localhost:3001/api/dashboard/definir-rota';
+// URL para buscar as linhas/motoristas disponíveis
+const API_LINHAS_DISPONIVEIS = 'http://localhost:3001/api/linhas/disponiveis'; 
+
 const SECRET_PASSWORD = "272006";
 
 /* ============================================================
@@ -20,7 +24,7 @@ function AuthModal({ onLogin, error }) {
   return (
     <div className="auth-modal-overlay">
       <div className="auth-modal p-5 shadow">
-        <h3 className="text-center mb-4">Área Restrita</h3>
+        <h3 className="text-center mb-4 text-white">Área Restrita</h3>
         <p className="text-center text-secondary mb-4">
           Digite a senha da diretoria para acessar.
         </p>
@@ -43,7 +47,7 @@ function AuthModal({ onLogin, error }) {
             <button
               type="button"
               className="btn btn-outline-secondary px-4 py-2"
-              onClick={() => console.log("Acesso à Diretoria cancelado.")}
+              onClick={() => console.log("Acesso cancelado")}
             >
               Cancelar
             </button>
@@ -59,7 +63,7 @@ function AuthModal({ onLogin, error }) {
 }
 
 /* ============================================================
-    MODAL PRINCIPAL (JANELA COM O CONTEÚDO)
+    MODAL PRINCIPAL
 ============================================================ */
 function ContentModal({ onClose, children }) {
   return (
@@ -80,14 +84,13 @@ function ContentModal({ onClose, children }) {
 }
 
 /* ============================================================
-    CONTEÚDO PRINCIPAL DA DIRETORIA (DENTRO DO MODAL)
+    CONTEÚDO PRINCIPAL DA DIRETORIA
 ============================================================ */
 function DiretoriaContent({
   turno,
   setTurno,
-  listaOnibus,
+  listaOnibus, 
   listaFaculdades,
-  listaMotoristas,
   onibusSelecionado,
   toggleOnibus,
   faculdadesSelecionadas,
@@ -95,16 +98,59 @@ function DiretoriaContent({
   motoristasSelecionados,
   selecionarMotorista,
   onSalvar,
+  saveStatus,
 }) {
-  const isAnyBusSelected = Object.keys(onibusSelecionado).some(
-    (key) => onibusSelecionado[key]
-  );
+    
+  // Lista única de Grupos (Ônibus)
+  const gruposOnibus = [...new Set(listaOnibus.map(item => item.grupo))];
+  
+  // Mapeia todos os motoristas disponíveis
+  const nomesCompletos = listaOnibus.map(item => ({ 
+      id: item.id_linha, 
+      nome: item.nome_exibicao,
+      grupo: item.grupo 
+  }));
 
-  const isSelectionComplete = listaOnibus
-    .filter((onibus) => onibusSelecionado[onibus])
+  // Função auxiliar para limpar o nome (Tira "Verde 01 - " e deixa só "Marquinhos")
+  const formatarNomeMotorista = (nomeCompleto) => {
+      if (!nomeCompleto) return "";
+      const partes = nomeCompleto.split(' - ');
+      if (partes.length > 1) {
+          return partes[1]; 
+      }
+      return nomeCompleto;
+  };
+
+  // --- NOVA LÓGICA DE FILTRO (REMOVE DUPLICATAS) ---
+  // Cria uma lista onde cada nome de motorista aparece apenas uma vez
+  const motoristasUnicos = [];
+  const nomesVistos = new Set();
+
+  nomesCompletos.forEach(item => {
+      const nomeFormatado = formatarNomeMotorista(item.nome);
+      if (!nomesVistos.has(nomeFormatado)) {
+          nomesVistos.add(nomeFormatado);
+          motoristasUnicos.push({
+              id: item.id, // Usa o primeiro ID encontrado para esse nome
+              nomeExibicao: nomeFormatado
+          });
+      }
+  });
+
+  // IDs de motoristas já selecionados em outros grupos
+  const selectedDriverIds = Object.values(motoristasSelecionados)
+    .filter(v => v !== undefined && v !== null && v !== "")
+    .map(v => Number(v)); // garante number
+
+  const isAnyBusSelected = gruposOnibus.some(
+      (grupo) => onibusSelecionado[grupo]
+  );
+  
+  const isSelectionComplete = gruposOnibus
+    .filter((grupo) => onibusSelecionado[grupo])
     .every(
-      (onibus) =>
-        faculdadesSelecionadas[onibus] && motoristasSelecionados[onibus]
+      (grupo) =>
+        faculdadesSelecionadas[grupo] && motoristasSelecionados[grupo]
     );
 
   const isSaveDisabled = !turno || !isAnyBusSelected || !isSelectionComplete;
@@ -143,20 +189,20 @@ function DiretoriaContent({
       </div>
 
       <div className="row mt-4">
-        {/* COLUNA ÔNIBUS */}
+        {/* COLUNA 1: ÔNIBUS (GRUPO) */}
         <div className="col-lg-4 col-12">
-          <h5 className="titulo-secao">Selecione o ônibus</h5>
+          <h5 className="titulo-secao">Selecione o ônibus (Grupo)</h5>
 
-          {listaOnibus.map((onibus, i) => (
+          {gruposOnibus.map((grupo, i) => (
             <div key={i} className="d-flex align-items-center mb-3">
               <label className="onibus-item d-flex align-items-center">
                 <input
                   type="checkbox"
                   disabled={!turno}
-                  checked={!!onibusSelecionado[onibus]}
-                  onChange={() => toggleOnibus(onibus)}
+                  checked={!!onibusSelecionado[grupo]}
+                  onChange={() => toggleOnibus(grupo)}
                 />
-                <span className="onibus-nome ms-2">{onibus}</span>
+                <span className="onibus-nome ms-2">{grupo}</span>
               </label>
             </div>
           ))}
@@ -167,24 +213,24 @@ function DiretoriaContent({
           <div className="linha-vertical"></div>
         </div>
 
-        {/* COLUNA FACULDADES */}
+        {/* COLUNA 2: FACULDADES */}
         <div className="col-lg-3 col-12">
           <h5 className="titulo-secao">Faculdades</h5>
 
-          {listaOnibus.map((onibus, i) => (
+          {gruposOnibus.map((grupo, i) => (
             <div key={i} className="d-flex align-items-center mb-3">
               <select
                 className="form-select form-select-sm faculdade-select"
-                disabled={!onibusSelecionado[onibus]}
-                value={faculdadesSelecionadas[onibus] ?? ""}
+                disabled={!onibusSelecionado[grupo]}
+                value={faculdadesSelecionadas[grupo] ?? ""}
                 onChange={(e) =>
-                  selecionarFaculdade(onibus, e.target.value)
+                  selecionarFaculdade(grupo, e.target.value)
                 }
               >
                 <option value="">Selecione a faculdade</option>
 
                 {listaFaculdades.map((facul, j) => (
-                  <option key={j} value={facul}>
+                  <option key={j} value={facul.toLowerCase()}> 
                     {facul}
                   </option>
                 ))}
@@ -198,41 +244,62 @@ function DiretoriaContent({
           <div className="linha-vertical"></div>
         </div>
 
-        {/* COLUNA MOTORISTAS */}
+        {/* COLUNA 3: MOTORISTAS (AGORA SEM DUPLICATAS E COM REMOÇÃO DINÂMICA) */}
         <div className="col-lg-3 col-12">
           <h5 className="titulo-secao">Motoristas</h5>
 
-          {listaOnibus.map((onibus, i) => (
-            <div key={i} className="d-flex align-items-center mb-3">
-              <select
-                className="form-select form-select-sm faculdade-select"
-                disabled={!onibusSelecionado[onibus]}
-                value={motoristasSelecionados[onibus] ?? ""}
-                onChange={(e) =>
-                  selecionarMotorista(onibus, e.target.value)
-                }
-              >
-                <option value="">Selecione o motorista</option>
+          {gruposOnibus.map((grupo, i) => {
+            // Calcula os motoristas disponíveis para este grupo
+            const availableMotoristas = motoristasUnicos.filter(item => {
+              // Se este item for o selecionado para ESTE grupo, deixamos disponível
+              const isSelectedInThisGroup = Number(motoristasSelecionados[grupo]) === Number(item.id);
 
-                {listaMotoristas.map((mot, j) => (
-                  <option key={j} value={mot}>
-                    {mot}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
+              // Se estiver selecionado em outro grupo, não mostramos
+              const isSelectedElsewhere = selectedDriverIds.includes(Number(item.id)) && !isSelectedInThisGroup;
+
+              return !isSelectedElsewhere;
+            });
+
+            return (
+              <div key={i} className="d-flex align-items-center mb-3">
+                <select
+                  className="form-select form-select-sm faculdade-select"
+                  disabled={!onibusSelecionado[grupo]}
+                  value={motoristasSelecionados[grupo] ?? ""}
+                  onChange={(e) =>
+                    selecionarMotorista(grupo, parseInt(e.target.value))
+                  }
+                >
+                  <option value="">Selecione o motorista</option>
+
+                  {/* Mostra apenas os disponíveis (ou o já selecionado para o próprio grupo) */}
+                  {availableMotoristas.map((item, j) => (
+                      <option key={j} value={item.id}>
+                        {item.nomeExibicao}
+                      </option>
+                  ))}
+                </select>
+              </div>
+            );
+          })}
         </div>
       </div>
+
+      {/* STATUS DE SALVAR */}
+      {saveStatus.message && (
+          <p className={`text-center mt-3 ${saveStatus.type === 'error' ? 'text-danger' : 'text-success'}`}>
+              {saveStatus.message}
+          </p>
+      )}
 
       {/* BOTÃO SALVAR */}
       <div className="d-flex justify-content-center mt-5">
         <button
           onClick={onSalvar}
           className="btn btn-lg btn-neon-access px-5 py-3"
-          disabled={isSaveDisabled}
+          disabled={isSaveDisabled || saveStatus.type === 'loading'}
         >
-          Salvar
+          {saveStatus.type === 'loading' ? 'Salvando...' : 'Salvar'}
         </button>
       </div>
     </div>
@@ -240,58 +307,77 @@ function DiretoriaContent({
 }
 
 /* ============================================================
-    COMPONENTE PRINCIPAL
+    COMPONENTE PRINCIPAL (PÁGINA)
 ============================================================ */
 export default function DiretoriaPage() {
   const [acessoLiberado, setAcessoLiberado] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [isModalPrincipalOpen, setIsModalPrincipalOpen] = useState(false);
 
+  const [saveStatus, setSaveStatus] = useState({ type: null, message: '' });
+
+  // Mock dados atualizados sem o Amarelo repetido
+  const dadosMockados = [
+    { id_linha: 1, nome_exibicao: 'Verde 01 - Marquinhos', grupo: 'Verde 01' },
+    { id_linha: 2, nome_exibicao: 'Verde 01 - Gustavo', grupo: 'Verde 01' },
+    { id_linha: 3, nome_exibicao: 'Verde 02 - Adilson', grupo: 'Verde 02' },
+    { id_linha: 4, nome_exibicao: 'Verde 02 - Eliseu', grupo: 'Verde 02' },
+    { id_linha: 5, nome_exibicao: 'Verde 03 - Motorista Extra', grupo: 'Verde 03' },
+    { id_linha: 6, nome_exibicao: 'Gran - Álvaro', grupo: 'Gran' },
+    { id_linha: 7, nome_exibicao: 'Gran - Gustavo', grupo: 'Gran' },
+    { id_linha: 8, nome_exibicao: 'Amarelo G - Marquinhos', grupo: 'Amarelo G' }
+  ];
+
+  const [linhasDisponiveis, setLinhasDisponiveis] = useState(dadosMockados);
+
   const [turno, setTurno] = useState("");
   const [onibusSelecionado, setOnibusSelecionado] = useState({});
   const [faculdadesSelecionadas, setFaculdadesSelecionadas] = useState({});
   const [motoristasSelecionados, setMotoristasSelecionados] = useState({});
 
-  const listaOnibus = [
-    "Verde 01",
-    "Verde 02",
-    "Verde 03",
-    "Granmicro",
-    "Amarelinho G",
-  ];
+
+  useEffect(() => {
+    async function fetchLinhas() {
+        try {
+            const response = await fetch(API_LINHAS_DISPONIVEIS); 
+            const data = await response.json();
+            if (data && data.length > 0) {
+              setLinhasDisponiveis(data);
+            }
+        } catch (error) {
+            console.error("Erro ao carregar linhas (usando dados locais):", error);
+        }
+    }
+    fetchLinhas();
+  }, []); 
 
   const listaFaculdades = ["Unex", "Anhanguera", "Uesc"];
-  const listaMotoristas = [
-    "Marquinhos",
-    "Álvaro",
-    "Adilson",
-    "Gustavo",
-    "Elizeu"
-  ];
+
 
   function handleLogin(password) {
     if (password === SECRET_PASSWORD) {
       setAcessoLiberado(true);
+      setIsModalPrincipalOpen(true);
       setLoginError("");
     } else {
       setLoginError("Senha incorreta. Tente novamente.");
     }
   }
 
-  function toggleOnibus(onibus) {
+  function toggleOnibus(grupo) {
     setOnibusSelecionado((prev) => {
-      const novo = { ...prev, [onibus]: !prev[onibus] };
+      const novo = { ...prev, [grupo]: !prev[grupo] };
 
-      if (!novo[onibus]) {
+      if (!novo[grupo]) {
         setFaculdadesSelecionadas((prev) => {
           const copy = { ...prev };
-          delete copy[onibus];
+          delete copy[grupo];
           return copy;
         });
 
         setMotoristasSelecionados((prev) => {
           const copy = { ...prev };
-          delete copy[onibus];
+          delete copy[grupo];
           return copy;
         });
       }
@@ -300,60 +386,62 @@ export default function DiretoriaPage() {
     });
   }
 
-  function selecionarFaculdade(onibus, faculdade) {
+  function selecionarFaculdade(grupo, faculdade) {
     setFaculdadesSelecionadas((prev) => ({
       ...prev,
-      [onibus]: faculdade,
+      [grupo]: faculdade, 
     }));
   }
 
-  function selecionarMotorista(onibus, motorista) {
+  function selecionarMotorista(grupo, id_linha) {
     setMotoristasSelecionados((prev) => ({
       ...prev,
-      [onibus]: motorista,
+      [grupo]: id_linha, 
     }));
   }
 
-  /* ============================================================
-      🔥 AQUI ESTÁ O NOVO handleSalvar COM FETCH 🔥
-  ============================================================ */
+
   async function handleSalvar() {
-    const onibusAtivos = listaOnibus.filter((o) => onibusSelecionado[o]);
+    const listaOnibusGrupos = [...new Set(linhasDisponiveis.map(item => item.grupo))];
+    
+    const alocacoes = listaOnibusGrupos
+        .filter((grupo) => onibusSelecionado[grupo])
+        .map((grupo) => ({
+            faculdade: faculdadesSelecionadas[grupo],
+            id_linha: motoristasSelecionados[grupo], 
+        }))
+        .filter(a => a.faculdade && a.id_linha);
 
-    const alocacoes = onibusAtivos.map((o) => ({
-      onibus: o,
-      faculdade: faculdadesSelecionadas[o] || null,
-      motorista: motoristasSelecionados[o] || null,
-    }));
 
-    const payload = {
-      turno,
-      alocacoes,
-    };
+    if (alocacoes.length === 0) {
+        setSaveStatus({ type: 'error', message: 'Nenhuma alocação completa para salvar.' });
+        return;
+    }
+
+    setSaveStatus({ type: 'loading', message: 'Salvando no servidor...' });
 
     try {
-      const resposta = await fetch("http://localhost:3001/salvar-alocacoes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const retorno = await resposta.json();
-
-      if (retorno.sucesso) {
-        alert("Dados salvos com sucesso!");
-      } else {
-        alert("Erro ao salvar os dados.");
+      for (const alocacao of alocacoes) {
+          const response = await fetch(API_ROTA_SALVAR, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(alocacao), 
+          });
+          
+          if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(`Falha ao salvar a rota ${alocacao.faculdade}: ${errorText}`);
+          }
       }
+
+      setSaveStatus({ type: 'success', message: 'Alocações salvas com sucesso!' });
+      setTimeout(() => setIsModalPrincipalOpen(false), 1500); 
+
     } catch (error) {
       console.error("Erro ao enviar:", error);
-      alert("Falha ao enviar para o servidor.");
+      setSaveStatus({ type: 'error', message: `Falha ao enviar para o servidor: ${error.message}` });
     }
   }
-
-  /* ============================================================
-      RENDERIZAÇÃO
-  ============================================================ */
 
   if (!acessoLiberado) {
     return (
@@ -388,9 +476,8 @@ export default function DiretoriaPage() {
             <DiretoriaContent
               turno={turno}
               setTurno={setTurno}
-              listaOnibus={listaOnibus}
+              listaOnibus={linhasDisponiveis}
               listaFaculdades={listaFaculdades}
-              listaMotoristas={listaMotoristas}
               onibusSelecionado={onibusSelecionado}
               toggleOnibus={toggleOnibus}
               faculdadesSelecionadas={faculdadesSelecionadas}
@@ -398,6 +485,7 @@ export default function DiretoriaPage() {
               motoristasSelecionados={motoristasSelecionados}
               selecionarMotorista={selecionarMotorista}
               onSalvar={handleSalvar}
+              saveStatus={saveStatus}
             />
           </ContentModal>
         )}

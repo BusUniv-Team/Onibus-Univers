@@ -11,7 +11,7 @@ import imgFundoDireita from "../../assets/card1.png";
 // --- NOVAS IMAGENS (ÔNIBUS PEQUENOS) ---
 import iconBusVerde from "../../assets/onibus_verde.png";   
 import iconBusAmarelo from "../../assets/onibus_amarelo.png"; 
-import iconBusPadrao from "../../assets/onibus_amareloG.png";   
+import iconBusPadrao from "../../assets/onibus_amareloG.png";   
 
 // URL base que conecta no backend
 const API_BASE_URL = 'http://localhost:3001/api/dashboard/contagem';
@@ -30,11 +30,11 @@ async function jsonFetch(url) {
 export default function Inicio() {
   const diaAtual = getDiaAtual();
 
-  // Estado inicial zerado
+  // ESTADO ATUALIZADO: Agora inclui 'grupo' e 'nome_exibicao'
   const [stats, setStats] = useState({
-    anhanguera: { ida: 0, volta: 0, idaEVolta: 0, nome: "Aguardando..." },
-    unex: { ida: 0, volta: 0, idaEVolta: 0, nome: "Aguardando..." },
-    uesc: { ida: 0, volta: 0, idaEVolta: 0, nome: "Aguardando..." },
+    anhanguera: { ida: 0, volta: 0, idaEVolta: 0, nome_exibicao: "Aguardando...", grupo: null },
+    unex:       { ida: 0, volta: 0, idaEVolta: 0, nome_exibicao: "Aguardando...", grupo: null },
+    uesc:       { ida: 0, volta: 0, idaEVolta: 0, nome_exibicao: "Aguardando...", grupo: null },
   });
 
   useEffect(() => {
@@ -43,6 +43,7 @@ export default function Inicio() {
         // Chama a rota criada no backend: /api/dashboard/contagem/current-votes?dia=SEG
         const response = await jsonFetch(`${API_BASE_URL}/current-votes?dia=${diaAtual}`);
         if (response) {
+            // O backend retorna agora nome_exibicao e grupo
             setStats(response);
         }
       } catch (error) {
@@ -58,13 +59,25 @@ export default function Inicio() {
   }, [diaAtual]);
 
   // --- FUNÇÃO PARA ESCOLHER A IMAGEM PEQUENA ---
-  const getIconeOnibus = (nome) => {
-    if (!nome) return iconBusPadrao;
-    const nomeLower = nome.toLowerCase();
+  const getIconeOnibus = (grupo) => {
+    // Se grupo for null ou undefined, retorna padrão
+    if (!grupo) return iconBusPadrao; 
     
-    if (nomeLower.includes("verde")) return iconBusVerde;
-    if (nomeLower.includes("amarelo") || nomeLower.includes("gran")) return iconBusAmarelo;
+    // Transforma em minúsculas e remove espaços extras
+    const grupoLower = grupo.toLowerCase().trim();
     
+    // 1. Lógica para os Verdes (Verde 01, Verde 02, etc)
+    if (grupoLower.includes("verde")) {
+        return iconBusVerde;
+    } 
+    
+    // 2. Lógica para o Amarelinho PEQUENO (Se o grupo for só "Amarelo" ou "Amarelinho")
+    // Cuidado para não confundir com "Amarelo G"
+    if (grupoLower === "amarelo" || grupoLower === "amarelinho") {
+        return iconBusAmarelo; 
+    } 
+    
+    // 3. Todo o resto vai ser o ônibus Grande (Gran, Amarelo G, Padrao)
     return iconBusPadrao;
   };
 
@@ -74,9 +87,6 @@ export default function Inicio() {
     { id: "meio", imgBg: imgFundoMeio, dados: stats.unex },
     { id: "dir", imgBg: imgFundoDireita, dados: stats.uesc }
   ];
-
-  // Estado para controle de clique no mobile (efeito visual)
-  const [expandedCard, setExpandedCard] = useState(null);
 
   return (
     <div className="app-sidebar-wrapper">
@@ -92,17 +102,16 @@ export default function Inicio() {
                 {/* 1. Fundo do Card */}
                 <img src={card.imgBg} alt="Fundo Card" className="card-img-full" />
 
-                {/* 2. Imagem do Ônibus Variável (Sobreposta) */}
-                {/* Aqui estava duplicado antes, agora está corrigido */}
+                {/* 2. Imagem do Ônibus Variável (Usa o campo 'grupo' para a cor) */}
                 <img 
-                  src={getIconeOnibus(card.dados.nome)} 
+                  src={getIconeOnibus(card.dados.grupo)} 
                   alt="Ícone Ônibus" 
                   className="bus-icon-overlay" 
                 />
                 
-                {/* 3. Nome do Motorista ou Status */}
+                {/* 3. Nome do Motorista ou Status (Usa o campo 'nome_exibicao') */}
                 <div className="driver-name">
-                  {card.dados.nome}
+                  {card.dados.nome_exibicao}
                 </div>
 
                 {/* 4. Contadores (Zeros ou números do banco) */}
