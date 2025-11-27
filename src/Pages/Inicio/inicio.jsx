@@ -9,12 +9,12 @@ import imgFundoMeio from "../../assets/card2.png";
 import imgFundoDireita from "../../assets/card1.png";
 
 // --- NOVAS IMAGENS (ÔNIBUS PEQUENOS) ---
-// Seus nomes de arquivo exatos conforme seu print
 import iconBusVerde from "../../assets/onibus_verde.png";   
 import iconBusAmarelo from "../../assets/onibus_amarelo.png"; 
 import iconBusPadrao from "../../assets/onibus_amareloG.png";   
 
-const API_BASE_URL = 'http://localhost:3000/api/poll';
+// URL base que conecta no backend
+const API_BASE_URL = 'http://localhost:3001/api/dashboard/contagem';
 
 const getDiaAtual = () => {
   const dias = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
@@ -30,6 +30,7 @@ async function jsonFetch(url) {
 export default function Inicio() {
   const diaAtual = getDiaAtual();
 
+  // Estado inicial zerado
   const [stats, setStats] = useState({
     anhanguera: { ida: 0, volta: 0, idaEVolta: 0, nome: "Aguardando..." },
     unex: { ida: 0, volta: 0, idaEVolta: 0, nome: "Aguardando..." },
@@ -39,6 +40,7 @@ export default function Inicio() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        // Chama a rota criada no backend: /api/dashboard/contagem/current-votes?dia=SEG
         const response = await jsonFetch(`${API_BASE_URL}/current-votes?dia=${diaAtual}`);
         if (response) {
             setStats(response);
@@ -49,6 +51,7 @@ export default function Inicio() {
     };
 
     fetchStats(); 
+    // Atualiza a cada 5 segundos para pegar votos novos em tempo real
     const interval = setInterval(fetchStats, 5000); 
 
     return () => clearInterval(interval);
@@ -65,26 +68,15 @@ export default function Inicio() {
     return iconBusPadrao;
   };
 
-  // Mapeamento dos dados
+  // Mapeamento dos dados para gerar os cards
   const cardsData = [
     { id: "esq", imgBg: imgFundoEsquerda, dados: stats.anhanguera },
     { id: "meio", imgBg: imgFundoMeio, dados: stats.unex },
     { id: "dir", imgBg: imgFundoDireita, dados: stats.uesc }
   ];
 
-  // [NOVO] Estado para o efeito de pressionar no mobile
+  // Estado para controle de clique no mobile (efeito visual)
   const [expandedCard, setExpandedCard] = useState(null);
-
-  // [NOVO] Funções para lidar com o toque/clique
-  const handlePressStart = (id) => {
-    if (window.innerWidth <= 1024) { // Só ativa no mobile
-      setExpandedCard(id);
-    }
-  };
-
-  const handlePressEnd = () => {
-    setExpandedCard(null); // Soltou, volta ao normal
-  };
 
   return (
     <div className="app-sidebar-wrapper">
@@ -97,29 +89,23 @@ export default function Inicio() {
             {cardsData.map((card) => (
               <div key={card.id} className="bus-card">
                 
-{/* 1. Fundo do Card */}
-<img src={card.imgBg} alt="Fundo Card" className="card-img-full" />
+                {/* 1. Fundo do Card */}
+                <img src={card.imgBg} alt="Fundo Card" className="card-img-full" />
 
-{/* 2. [NOVO] Imagem do Ônibus Variável (Sobreposta) */}
-<img 
-  src={getIconeOnibus(card.dados.nome)} 
-  alt="Ícone Ônibus" 
-  className="bus-icon-overlay" 
-/>
-                
                 {/* 2. Imagem do Ônibus Variável (Sobreposta) */}
+                {/* Aqui estava duplicado antes, agora está corrigido */}
                 <img 
                   src={getIconeOnibus(card.dados.nome)} 
                   alt="Ícone Ônibus" 
                   className="bus-icon-overlay" 
                 />
                 
-                {/* 3. Nome do Motorista */}
+                {/* 3. Nome do Motorista ou Status */}
                 <div className="driver-name">
                   {card.dados.nome}
                 </div>
 
-                {/* 4. Zeros */}
+                {/* 4. Contadores (Zeros ou números do banco) */}
                 <div className="stats-overlay">
                    <div className="stat-number">{card.dados.ida}</div>
                    <div className="stat-number">{card.dados.idaEVolta}</div>
