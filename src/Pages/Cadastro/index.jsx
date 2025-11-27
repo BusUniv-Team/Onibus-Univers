@@ -1,6 +1,7 @@
+import "./styles.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./style.css";
+import "../../assets/fundo2.jpg"
 
 function Cadastro() {
   const [form, setForm] = useState({
