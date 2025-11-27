@@ -70,6 +70,7 @@ function Cadastro() {
       const text = await resposta.text();
       let data = {};
       if (text) {
+        // eslint-disable-next-line no-unused-vars
         try { data = JSON.parse(text); } catch (_) { data = { mensagem: text }; }
       }
 
