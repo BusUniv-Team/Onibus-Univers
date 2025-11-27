@@ -42,166 +42,161 @@ function Cadastro() {
       return;
     }
 
-    console.log("📦 Dados do formulário:", Object.fromEntries(new FormData(e.target).entries()));
-    setMessage({ type: "success", text: "Cadastro pronto para envio (simulação)." });
     setLoading(true);
+
     try {
-      const resposta = await fetch(
-        "http://localhost:3001/api/usuarios/cadastrar",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", 
-          },
-          body: JSON.stringify({
-            nome,
-            turno,
-            faculdade,
-            curso,
-            cpf,
-            telefone,
-            email,
-            periodo: periodoNum,
-            // tem que configurar pra mandar pdf, por enquanto ta mandando so dados
-            // fiz algumas alterações aqui no frontend para poder facilitar no back
-          }),
-        }
-      );
+      // 3. Montagem dos dados para envio
+      const formData = new FormData(e.target);
 
-      const data = await resposta.json();
-      console.log("🔁 Resposta do backend:", data);
+      // --- TRUQUE: Injeta o CPF como senha ---
+      formData.append("senha", form.cpf);
 
-      if (!resposta.ok) {
-        setMessage({
-          type: "error",
-          text: data.mensagem || "Erro ao enviar cadastro para o servidor.",
-        });
-        return;
+      // --- Garante que o arquivo vai junto ---
+      if (comprovante) {
+        formData.append("comprovante", comprovante);
       }
 
-      setMessage({
-        type: "success",
-        text: data.mensagem || "Cadastro enviado ao servidor com sucesso!",
+      // Log para conferência no navegador
+      console.log("📦 Enviando:", Object.fromEntries(formData.entries()));
+
+      // 4. ENVIO PARA O BACK-END (Mude a URL abaixo)
+      const response = await fetch("http://localhost:3000/api/cadastro", {
+        method: "POST",
+        body: formData,
       });
-    } catch (erro) {
-      console.error("Erro ao enviar para o backend:", erro);
-      setMessage({
-        type: "error",
-        text: "Erro de conexão com o servidor.",
-      });
+
+      if (response.ok) {
+        setMessage({ type: "success", text: "Cadastro realizado com sucesso!" });
+        // Opcional: Limpar formulário após sucesso
+        // setForm({ ...form, nome: "", cpf: "", ... }); 
+      } else {
+        setMessage({ type: "error", text: "Erro ao cadastrar. Verifique os dados." });
+      }
+
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+      setMessage({ type: "error", text: "Erro de conexão com o servidor." });
     } finally {
       setLoading(false);
     }
   };
 
+  return (
+    <div className="cadastro-page">
+      <div className="cadastro-container">
+        <form className="cadastro-card" onSubmit={handleSubmit}>
+          
+          {/* Nome */}
+          <input
+            name="nome"
+            type="text"
+            placeholder="Nome completo"
+            value={form.nome}
+            onChange={handleChange}
+            required
+            className="cadastro-span-2"
+          />
 
+          {/* Turno */}
+          <select name="turno" value={form.turno} onChange={handleChange} required>
+            <option value="">Turno</option>
+            <option value="Diurno">Diurno</option>
+            <option value="Integral">Noturno</option>
+          </select>
 
-return (
-  <div className="home-page">
-    <div className="home-container">
-      <form className="home-card" onSubmit={handleSubmit}>
-        <input
-          name="nome"
-          type="text"
-          placeholder="Nome completo"
-          value={form.nome}
-          onChange={handleChange}
-          required
-          className="home-span-2"
-        />
-
-        <select name="turno" value={form.turno} onChange={handleChange} required>
-          <option value="">Turno</option>
-          <option value="Diurno">Diurno</option>
-          <option value="Integral">Integral</option>
-        </select>
-
-        <select name="faculdade" value={form.faculdade} onChange={handleChange} required>
-          <option value="">Faculdade</option>
-          <option value="UESC">UESC</option>
-          <option value="Anhanguera">Anhanguera</option>
-          <option value="UNEX">UNEX</option>
-        </select>
-
-        <input
-          name="curso"
-          type="text"
-          placeholder="Curso"
-          value={form.curso}
-          onChange={handleChange}
-          required
-          className="home-span-2"
-        />
-
-        <input
-          name="cpf"
-          type="text"
-          placeholder="CPF"
-          maxLength="11"
-          value={form.cpf}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          name="telefone"
-          type="tel"
-          placeholder="Telefone"
-          value={form.telefone}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="home-span-2"
-        />
-
-        <input
-          name="periodo"
-          type="text"
-          placeholder="Período (1-12)"
-          value={form.periodo}
-          onChange={handleChange}
-          required
-        />
-
-        {/* Arquivo */}
-        <label className="home-file-wrapper">
-          <span className="home-file-name">
-            {comprovante ? comprovante.name : "Comprovante (PDF)"}
-          </span>
-
-          <span className="home-file-btn">Anexar</span>
+          {/* Faculdade */}
+          <select name="faculdade" value={form.faculdade} onChange={handleChange} required>
+            <option value="">Faculdade</option>
+            <option value="UESC">UESC</option>
+            <option value="Anhanguera">Anhanguera</option>
+            <option value="UNEX">UNEX</option>
+          </select>
 
           {/* Curso */}
           <input
-            type="file"
-            className="home-file-input"
-            accept="application/pdf"
-            onChange={handleFileChange}
+            name="curso"
+            type="text"
+            placeholder="Curso"
+            value={form.curso}
+            onChange={handleChange}
+            required
+            className="cadastro-span-2"
+          />
+
+          {/* CPF */}
+          <input
+            name="cpf"
+            type="text"
+            placeholder="CPF"
+            maxLength="11"
+            value={form.cpf}
+            onChange={handleChange}
             required
           />
-        </label>
 
-        <button className="home-btn" type="submit" disabled={loading}>
-          {loading ? "Enviando..." : "Cadastrar"}
-        </button>
+          {/* Telefone */}
+          <input
+            name="telefone"
+            type="tel"
+            placeholder="Telefone"
+            value={form.telefone}
+            onChange={handleChange}
+            required
+          />
 
-        {message && (
-          <p className={`home-message ${message.type}`}>
-            {message.text}
-          </p>
-        )}
-      </form>
+          {/* Email */}
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="cadastro-span-2"
+          />
+
+          {/* Período */}
+          <input
+            name="periodo"
+            type="text"
+            placeholder="Período (1-12)"
+            value={form.periodo}
+            onChange={handleChange}
+            required
+          />
+
+          {/* Arquivo (Comprovante) */}
+          <label className="cadastro-file-wrapper">
+            <span className="cadastro-file-name">
+              {comprovante ? comprovante.name : "Comprovante (PDF)"}
+            </span>
+
+            <span className="cadastro-file-btn">Anexar</span>
+
+            <input
+              type="file"
+              className="cadastro-file-input"
+              accept="application/pdf"
+              onChange={handleFileChange}
+              required
+            />
+          </label>
+
+          {/* Botão de Enviar */}
+          <button className="cadastro-btn" type="submit" disabled={loading}>
+            {loading ? "Enviando..." : "Cadastrar"}
+          </button>
+
+          {/* Mensagem de Erro/Sucesso */}
+          {message && (
+            <p className={`cadastro-message ${message.type}`}>
+              {message.text}
+            </p>
+          )}
+        </form>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default Cadastro;
