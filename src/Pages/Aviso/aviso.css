@@ -252,3 +252,78 @@
 .card-aviso.tipo-alerta {
   border-color: #e67e22; /* Laranja */
 }
+/* --- VERSÃO MOBILE (CELULAR) - FINAL --- */
+@media (max-width: 768px) {
+  
+  /* 1. O Container Principal (Fundo Galáxia) */
+  .aviso-container {
+    display: block;    /* Removemos flex para evitar bugs de altura no scroll */
+    height: auto;      /* Altura automática para rolar infinitamente */
+    min-height: 100vh; /* No mínimo o tamanho da tela */
+    padding: 10px;
+    padding-top: 20px;
+    overflow-y: auto;  /* Permite rolar a tela principal */
+  }
+
+  /* 2. O Quadro Verde */
+  .quadro-avisos {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    
+    /* AQUI ESTÁ A CORREÇÃO: */
+    height: auto !important; /* Força ele a crescer o quanto precisar */
+    min-height: fit-content; /* Garante que abrace o conteúdo */
+    
+    margin-bottom: 50px; /* Espaço extra no final para não colar no fim da tela */
+    padding-bottom: 20px; /* Espaço interno no final do verde */
+  }
+
+  /* 3. Cabeçalho Preso (Sticky) */
+  .quadro-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  }
+
+  .quadro-titulo {
+    font-size: 1.2rem;
+    text-align: left;
+    flex: 1;
+  }
+
+  /* 4. Lista de Avisos */
+  .lista-avisos {
+    padding: 15px;
+    gap: 20px;
+    overflow: visible; /* Importante: deixa o conteúdo esticar o pai (quadro verde) */
+    height: auto;      /* Remove limites de altura */
+    max-height: none;  /* Remove limites de altura */
+  }
+
+  .card-aviso {
+    padding: 20px 15px; /* Mais espaço interno no card */
+  }
+
+  /* 5. Texto do Aviso */
+  .card-texto {
+    font-size: 0.95rem;
+    
+    /* Quebra de linha forçada para textos longos/sem espaço */
+    word-break: break-word; 
+    overflow-wrap: break-word;
+    white-space: pre-wrap; /* Mantém os parágrafos se a pessoa der enter */
+    
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .card-header {
+    font-size: 0.75rem;
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* Se a data for grande, não quebra o layout */
+  }
+}
