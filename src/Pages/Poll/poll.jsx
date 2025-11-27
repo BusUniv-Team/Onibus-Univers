@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './poll.css';
 
 // URL base do backend
-const API_BASE_URL = 'http://localhost:3000/api/poll';
+const API_BASE_URL = 'http://localhost:3001/api/enquete/votar';
 
 
 // Função utilitária para requisições JSON
@@ -153,17 +153,19 @@ function Poll() {
     const diasAtivos = Object.entries(formData.dias)
       .filter(([, info]) => info.ativo)
       .map(([dia, info]) => ({
-        dia,
-        turno: info.turno,
-        trajeto: info.trajeto
+        dia,           // Envia "SEG"
+        turno: info.turno, // Envia "Diurno"
+        trajeto: info.trajeto // Envia "Ida e volta"
       }));
 
     const dataToSend = {
+      id_usuario: 1, // <--- ADICIONE ISSO (Temporário, depois vc pega do Login)
       faculdade: formData.faculdade,
       votos: diasAtivos,
     };
 
     try {
+      // Verifica se a URL lá em cima está: 'http://localhost:3001/api/enquete/votar'
       const response = await jsonFetch(API_BASE_URL, {
         method: 'POST',
         body: dataToSend,
