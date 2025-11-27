@@ -1,4 +1,5 @@
 /* ----- ROOT VARIÁVEIS ----- */
+
 :root {
   --card-bg: rgba(0, 20, 10, 0.9);
   --accent: #6a0dad;
@@ -9,11 +10,11 @@
   --muted: #cfcfcf;
 }
 
-/* Container geral da página */
+
 .cadastro-page {
   height: 100vh;
   width: 100%;
-  background-image: url('/fundo2.jpg');
+  background-image: url('../../assets/fundo2.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -29,7 +30,7 @@
   justify-content: center;
 }
 
-/* Card */
+
 .cadastro-card {
   background: var(--card-bg);
   padding: 24px;
@@ -48,7 +49,7 @@
   grid-column: 1 / -1;
 }
 
-/* Inputs */
+
 .cadastro-card input,
 .cadastro-card select {
   width: 100%;
@@ -67,7 +68,7 @@
   box-shadow: 0 3px 6px rgba(106, 13, 173, 0.5);
 }
 
-/* Arquivo */
+
 .cadastro-file-input {
   display: none;
 }
@@ -92,4 +93,53 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.cadastro-file-btn {
+  background: var(--input-border);
+  color: #fff;
+  padding: 8px 12px;
+  font-weight: 500;
+}
+
+
+.cadastro-btn {
+  grid-column: 1 / -1;
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-top: 8px;
+  transition: transform 0.1s, background 0.2s;
+}
+
+.cadastro-btn:hover {
+  background: #4b0082;
+  transform: translateY(-1px);
+}
+
+
+.cadastro-message {
+  grid-column: 1 / -1;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.cadastro-message.error {
+  color: #ff6b6b;
+}
+
+.cadastro-message.success {
+  color: #a8ffb0;
+}
+
+
+@media (max-width: 480px) {
+  .cadastro-card {
+    grid-template-columns: 1fr;
+  }
 }

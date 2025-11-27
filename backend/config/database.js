@@ -1,5 +1,6 @@
 // backend/config/database.js
 // pool do MySQL
+// config/database.js
 const mysql = require('mysql2');
 require('dotenv').config();
 

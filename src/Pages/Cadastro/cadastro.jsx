@@ -1,5 +1,6 @@
+import "./cadastro.css";
 import { useState } from "react";
-import "./style.css";
+import { useNavigate } from "react-router-dom";
 
 function Cadastro() {
   const [form, setForm] = useState({
@@ -16,6 +17,7 @@ function Cadastro() {
   const [comprovante, setComprovante] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -29,52 +31,60 @@ function Cadastro() {
 
     const { nome, turno, faculdade, curso, cpf, telefone, email, periodo } = form;
 
-    // 1. Validação simples
+    // Validação
     if (!nome || !turno || !faculdade || !curso || !cpf || !telefone || !email || !periodo || !comprovante) {
       setMessage({ type: "error", text: "Preencha todos os campos e envie o PDF!" });
       return;
     }
 
-    // 2. Validação do período
     const periodoNum = Number(periodo);
     if (isNaN(periodoNum) || periodoNum < 1 || periodoNum > 12) {
       setMessage({ type: "error", text: "Período deve ser um número de 1 a 12" });
       return;
     }
 
+    // Montagem do FormData (Lógica do Código 1 - Backend)
+    const formData = new FormData();
+    formData.append("nome", nome);
+    formData.append("turno", turno);
+    formData.append("faculdade", faculdade);
+    formData.append("curso", curso);
+    formData.append("cpf", cpf);
+    formData.append("telefone", telefone);
+    formData.append("email", email);
+    formData.append("periodo", periodo);
+    formData.append("comprovante", comprovante);
+
+    // TRUQUE: Injeta o CPF como senha (caso seu backend precise, conforme vc mencionou antes)
+    // Se o backend gera automaticamente, pode remover esta linha
+    formData.append("senha", cpf); 
+
     setLoading(true);
-
     try {
-      // 3. Montagem dos dados para envio
-      const formData = new FormData(e.target);
-
-      // --- TRUQUE: Injeta o CPF como senha ---
-      formData.append("senha", form.cpf);
-
-      // --- Garante que o arquivo vai junto ---
-      if (comprovante) {
-        formData.append("comprovante", comprovante);
-      }
-
-      // Log para conferência no navegador
-      console.log("📦 Enviando:", Object.fromEntries(formData.entries()));
-
-      // 4. ENVIO PARA O BACK-END (Mude a URL abaixo)
-      const response = await fetch("http://localhost:3000/api/cadastro", {
+      // Usando a URL e porta do Código 1 (que você disse que tem as alterações do backend)
+      const resposta = await fetch("http://localhost:3001/api/usuarios/cadastrar", {
         method: "POST",
-        body: formData,
+        body: formData 
       });
 
-      if (response.ok) {
-        setMessage({ type: "success", text: "Cadastro realizado com sucesso!" });
-        // Opcional: Limpar formulário após sucesso
-        // setForm({ ...form, nome: "", cpf: "", ... }); 
-      } else {
-        setMessage({ type: "error", text: "Erro ao cadastrar. Verifique os dados." });
+      const text = await resposta.text();
+      let data = {};
+      if (text) {
+        // eslint-disable-next-line no-unused-vars
+        try { data = JSON.parse(text); } catch (_) { data = { mensagem: text }; }
       }
 
-    } catch (error) {
-      console.error("Erro na requisição:", error);
+      if (!resposta.ok) {
+        setMessage({ type: "error", text: data.mensagem || "Erro ao enviar cadastro para o servidor." });
+        return;
+      }
+
+      // Sucesso
+      setMessage({ type: "success", text: data.mensagem || "Cadastro realizado com sucesso!" });
+      navigate("/login");
+      
+    } catch (erro) {
+      console.error("Erro ao enviar para o backend:", erro);
       setMessage({ type: "error", text: "Erro de conexão com o servidor." });
     } finally {
       setLoading(false);
@@ -82,11 +92,11 @@ function Cadastro() {
   };
 
   return (
+    // AQUI ESTAVA O ERRO: Voltei as classes para "cadastro-..." para bater com seu CSS
     <div className="cadastro-page">
       <div className="cadastro-container">
         <form className="cadastro-card" onSubmit={handleSubmit}>
           
-          {/* Nome */}
           <input
             name="nome"
             type="text"
@@ -97,14 +107,12 @@ function Cadastro() {
             className="cadastro-span-2"
           />
 
-          {/* Turno */}
           <select name="turno" value={form.turno} onChange={handleChange} required>
             <option value="">Turno</option>
             <option value="Diurno">Diurno</option>
-            <option value="Integral">Noturno</option>
+            <option value="Noturno">Noturno</option>
           </select>
 
-          {/* Faculdade */}
           <select name="faculdade" value={form.faculdade} onChange={handleChange} required>
             <option value="">Faculdade</option>
             <option value="UESC">UESC</option>
@@ -112,7 +120,6 @@ function Cadastro() {
             <option value="UNEX">UNEX</option>
           </select>
 
-          {/* Curso */}
           <input
             name="curso"
             type="text"
@@ -123,7 +130,6 @@ function Cadastro() {
             className="cadastro-span-2"
           />
 
-          {/* CPF */}
           <input
             name="cpf"
             type="text"
@@ -134,7 +140,6 @@ function Cadastro() {
             required
           />
 
-          {/* Telefone */}
           <input
             name="telefone"
             type="tel"
@@ -144,7 +149,6 @@ function Cadastro() {
             required
           />
 
-          {/* Email */}
           <input
             name="email"
             type="email"
@@ -155,7 +159,6 @@ function Cadastro() {
             className="cadastro-span-2"
           />
 
-          {/* Período */}
           <input
             name="periodo"
             type="text"
@@ -165,7 +168,7 @@ function Cadastro() {
             required
           />
 
-          {/* Arquivo (Comprovante) */}
+          {/* Arquivo com as classes certas */}
           <label className="cadastro-file-wrapper">
             <span className="cadastro-file-name">
               {comprovante ? comprovante.name : "Comprovante (PDF)"}
@@ -174,6 +177,7 @@ function Cadastro() {
             <span className="cadastro-file-btn">Anexar</span>
 
             <input
+              name="comprovante"
               type="file"
               className="cadastro-file-input"
               accept="application/pdf"
@@ -182,12 +186,10 @@ function Cadastro() {
             />
           </label>
 
-          {/* Botão de Enviar */}
           <button className="cadastro-btn" type="submit" disabled={loading}>
             {loading ? "Enviando..." : "Cadastrar"}
           </button>
 
-          {/* Mensagem de Erro/Sucesso */}
           {message && (
             <p className={`cadastro-message ${message.type}`}>
               {message.text}

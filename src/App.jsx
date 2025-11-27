@@ -3,9 +3,10 @@ import { Routes, Route } from "react-router-dom";
 // Páginas
 import Poll from "./Pages/Poll/poll.jsx";
 import Profile from "./Pages/Profile/profile.jsx";
-import Home from "./Pages/Cadastro/index.jsx";
+import Home from "./Pages/Cadastro/cadastro.jsx";
 import Login from "./Pages/Login/login.jsx";
 import Inicio from "./Pages/Inicio/inicio.jsx";
+import Aviso from "./Pages/Aviso/aviso.jsx";
 import Diretoria from "./Pages/Diretoria/diretoria.jsx"
 
 export default function App() {
@@ -16,8 +17,9 @@ export default function App() {
       <Route path="/poll" element={<Poll />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/inicio" element={<Inicio />} />
+      <Route path="/aviso" element={<Aviso />} />
       <Route path="/diretoria" element={<Diretoria />} />
-      
+
     </Routes>
   );
 }

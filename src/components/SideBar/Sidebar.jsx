@@ -20,7 +20,7 @@ function Sidebar() {
   const menuItems = [
     { icon: <FaHouse />, label: 'inicio', link: '/inicio' },
     { icon: <FaSquarePollHorizontal />, label: 'Enquete', link: '/Poll' },
-    { icon: <FaCircleInfo />, label: 'Avisos', link: '/' },
+    { icon: <FaCircleInfo />, label: 'Aviso', link: '/aviso' },
     { icon: <FaUser />, label: 'Perfil', link: '/Profile' },
     { icon: <FaDesktop />, label: 'Diretoria', link: '/diretoria' }
   ];
