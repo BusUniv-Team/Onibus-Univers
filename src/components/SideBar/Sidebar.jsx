@@ -22,7 +22,7 @@ function Sidebar() {
     { icon: <FaSquarePollHorizontal />, label: 'Enquete', link: '/Poll' },
     { icon: <FaCircleInfo />, label: 'Aviso', link: '/aviso' },
     { icon: <FaUser />, label: 'Perfil', link: '/Profile' },
-    { icon: <FaDesktop />, label: 'Diretoria', link: '/diretoria' }
+    { icon: <FaDesktop />, label: 'Diretoria', link: '/' }
   ];
 
   return (
