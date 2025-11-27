@@ -71,7 +71,7 @@ exports.obterDashboard = async (req, res) => {
       const faculKey = row.faculdade ? row.faculdade.toLowerCase() : null;
       
       if (faculKey && resposta[faculKey]) {
-        resposta[faculKey].nome = "Confirmado"; 
+  
         
         if (row.tipo_viagem === 'ida') resposta[faculKey].ida = row.total;
         if (row.tipo_viagem === 'volta') resposta[faculKey].volta = row.total;
