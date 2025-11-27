@@ -1,4 +1,5 @@
 /* ----- ROOT VARIÁVEIS ----- */
+
 :root {
   --card-bg: rgba(0, 20, 10, 0.9);
   --accent: #6a0dad;
@@ -9,11 +10,11 @@
   --muted: #cfcfcf;
 }
 
-/* Container geral da página */
+
 .cadastro-page {
   height: 100vh;
   width: 100%;
-  background-image: url('/fundo2.jpg');
+  background-image: url('../../assets/fundo2.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -29,7 +30,7 @@
   justify-content: center;
 }
 
-/* Card */
+
 .cadastro-card {
   background: var(--card-bg);
   padding: 24px;
@@ -48,7 +49,7 @@
   grid-column: 1 / -1;
 }
 
-/* Inputs */
+
 .cadastro-card input,
 .cadastro-card select {
   width: 100%;
@@ -67,7 +68,7 @@
   box-shadow: 0 3px 6px rgba(106, 13, 173, 0.5);
 }
 
-/* Arquivo */
+
 .cadastro-file-input {
   display: none;
 }
@@ -93,7 +94,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .cadastro-file-btn {
   background: var(--input-border);
   color: #fff;
@@ -101,7 +101,7 @@
   font-weight: 500;
 }
 
-/* Botão */
+
 .cadastro-btn {
   grid-column: 1 / -1;
   padding: 10px;
@@ -121,7 +121,7 @@
   transform: translateY(-1px);
 }
 
-/* Mensagem */
+
 .cadastro-message {
   grid-column: 1 / -1;
   font-size: 0.85rem;
@@ -137,7 +137,7 @@
   color: #a8ffb0;
 }
 
-/* RESPONSIVO */
+
 @media (max-width: 480px) {
   .cadastro-card {
     grid-template-columns: 1fr;
