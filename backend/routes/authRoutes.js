@@ -1,7 +1,7 @@
 // backend/routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
-const { login } = require('../controllers/authControllers'); // caminho relativo para ../controllers/authController.js
+const { login } = require('../controllers/authControllers'); 
 
 router.post('/login', login);
 
