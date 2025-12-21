@@ -6,13 +6,12 @@ import App from "./App.jsx";
 
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Poll from "./Pages/Poll/poll.jsx";
+import Contribuição from "./Pages/Contribuição/contribuition.jsx";
 import Login from "./Pages/Login/login.jsx";
 import Inicio from "./Pages/Inicio/inicio.jsx";
 import Cadastro from "./Pages/Cadastro/cadastro.jsx";
 import Aviso from "./Pages/Aviso/aviso.jsx";
 import Diretoria from "./Pages/Diretoria/diretoria.jsx"
-
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

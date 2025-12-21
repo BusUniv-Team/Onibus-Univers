@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import {
   FaHouse,
-  FaSquarePollHorizontal,
+  FaHandHoldingDollar,
   FaCircleInfo,
   FaUser,
   FaDesktop,
@@ -18,11 +18,12 @@ function Sidebar() {
   const location = useLocation();
 
   const menuItems = [
-    { icon: <FaHouse />, label: 'inicio', link: '/inicio' },
-    { icon: <FaSquarePollHorizontal />, label: 'Enquete', link: '/Poll' },
+    { icon: <FaHouse />, label: 'Inicio', link: '/inicio' },
+    { icon: <FaHandHoldingDollar />, label: 'Contribuição', link: '/contribuicao' },
     { icon: <FaCircleInfo />, label: 'Aviso', link: '/aviso' },
     { icon: <FaUser />, label: 'Perfil', link: '/Profile' },
-    { icon: <FaDesktop />, label: 'Diretoria', link: '/Diretoria' }
+    { icon: <FaDesktop />, label: 'Diretoria', link: '/Diretoria' },
+
   ];
 
   return (
