@@ -11,7 +11,7 @@ import imgFundoDireita from "../../assets/card1.png";
 
 import iconBusVerde from "../../assets/onibus_verde.png";   
 import iconBusAmarelo from "../../assets/onibus_amarelo.png"; 
-import iconBusPadrao from "../../assets/onibus_amarelo.png";   
+import iconBusPadrao from "../../assets/onibus_amarelo.png";  
 
 
 const API_BASE_URL = 'http://localhost:3001/api/dashboard/contagem';
@@ -89,7 +89,7 @@ export default function Inicio() {
   ];
 
   return (
-    <div className="app-sidebar-wrapper">
+    <div className="app-inicio-wrapper">
       <Sidebar activePage="inicio" />
 
       <div className="app-content-wrapper">

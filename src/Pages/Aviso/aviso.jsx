@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "./aviso.css";
 import Sidebar from "../../components/SideBar/Sidebar";
-import galaxyBg from "../../assets/galaxy2.jpg";
 import fundoBg from "../../assets/fundo5.jpg";
 import { FaTrash, FaThumbtack } from "react-icons/fa";
 
@@ -181,7 +180,7 @@ export default function Aviso() {
   });
 
   return (
-    <div className="app-sidebar-wrapper">
+    <div className="app-aviso-wrapper">
       <Sidebar activePage="aviso" />
       <div className="app-content-wrapper">
         <div className="aviso-container" style={{ backgroundImage: `url(${fundoBg})` }}>

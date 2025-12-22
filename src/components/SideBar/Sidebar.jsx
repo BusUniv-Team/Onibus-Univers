@@ -6,7 +6,11 @@ import {
   FaCircleInfo,
   FaUser,
   FaDesktop,
-  FaChevronRight
+  FaChevronRight,
+  FaMoneyBillWave,
+  FaPiggyBank
+  
+
 } from 'react-icons/fa6';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -23,6 +27,8 @@ function Sidebar() {
     { icon: <FaCircleInfo />, label: 'Aviso', link: '/aviso' },
     { icon: <FaUser />, label: 'Perfil', link: '/Profile' },
     { icon: <FaDesktop />, label: 'Diretoria', link: '/Diretoria' },
+    { icon: <FaMoneyBillWave />, label: 'Financeiro', link: '/financeiro' },
+    { icon: <FaPiggyBank />, label: 'Transparencia', link: '/transparencia' }
 
   ];
 

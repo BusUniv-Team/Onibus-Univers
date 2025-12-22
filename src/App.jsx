@@ -7,7 +7,9 @@ import Home from "./Pages/Cadastro/cadastro.jsx";
 import Login from "./Pages/Login/login.jsx";
 import Inicio from "./Pages/Inicio/inicio.jsx";
 import Aviso from "./Pages/Aviso/aviso.jsx";
-import Diretoria from "./Pages/Diretoria/diretoria.jsx"
+import Diretoria from "./Pages/Diretoria/diretoria.jsx";
+import Financeiro from "./Pages/Financeiro/finance.jsx";
+import Transparencia from "./Pages/Transparência/transparency.jsx"
 
 export default function App() {
   return (
@@ -19,6 +21,8 @@ export default function App() {
       <Route path="/inicio" element={<Inicio />} />
       <Route path="/aviso" element={<Aviso />} />
       <Route path="/diretoria" element={<Diretoria />} />
+      <Route path="/financeiro" element={<Financeiro />} />
+      <Route path="/transparencia" element={<Transparencia />} />
     </Routes>
   );
 }
