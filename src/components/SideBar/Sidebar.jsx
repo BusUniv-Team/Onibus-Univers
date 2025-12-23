@@ -23,10 +23,10 @@ function Sidebar() {
 
   const menuItems = [
     { icon: <FaHouse />, label: 'Inicio', link: '/inicio' },
-    { icon: <FaHandHoldingDollar />, label: 'Contribuição', link: '/contribuicao' },
-    { icon: <FaCircleInfo />, label: 'Aviso', link: '/aviso' },
     { icon: <FaUser />, label: 'Perfil', link: '/Profile' },
+    { icon: <FaCircleInfo />, label: 'Aviso', link: '/aviso' },
     { icon: <FaDesktop />, label: 'Diretoria', link: '/Diretoria' },
+    { icon: <FaHandHoldingDollar />, label: 'Contribuição', link: '/contribuicao' },
     { icon: <FaMoneyBillWave />, label: 'Financeiro', link: '/financeiro' },
     { icon: <FaPiggyBank />, label: 'Transparencia', link: '/transparencia' }
 
