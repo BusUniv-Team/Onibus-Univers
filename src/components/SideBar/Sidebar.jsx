@@ -2,11 +2,15 @@ import { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import {
   FaHouse,
-  FaSquarePollHorizontal,
+  FaHandHoldingDollar,
   FaCircleInfo,
   FaUser,
   FaDesktop,
-  FaChevronRight
+  FaChevronRight,
+  FaMoneyBillWave,
+  FaPiggyBank
+  
+
 } from 'react-icons/fa6';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,11 +22,14 @@ function Sidebar() {
   const location = useLocation();
 
   const menuItems = [
-    { icon: <FaHouse />, label: 'inicio', link: '/inicio' },
-    { icon: <FaSquarePollHorizontal />, label: 'Enquete', link: '/Poll' },
-    { icon: <FaCircleInfo />, label: 'Aviso', link: '/aviso' },
+    { icon: <FaHouse />, label: 'Inicio', link: '/inicio' },
     { icon: <FaUser />, label: 'Perfil', link: '/Profile' },
-    { icon: <FaDesktop />, label: 'Diretoria', link: '/Diretoria' }
+    { icon: <FaCircleInfo />, label: 'Aviso', link: '/aviso' },
+    { icon: <FaDesktop />, label: 'Diretoria', link: '/Diretoria' },
+    { icon: <FaHandHoldingDollar />, label: 'Contribuição', link: '/contribuicao' },
+    { icon: <FaMoneyBillWave />, label: 'Financeiro', link: '/financeiro' },
+    { icon: <FaPiggyBank />, label: 'Transparencia', link: '/transparencia' }
+
   ];
 
   return (

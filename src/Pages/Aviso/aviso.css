@@ -327,3 +327,41 @@
     flex-wrap: wrap; /* Se a data for grande, não quebra o layout */
   }
 }
+
+@media (min-width: 768px) { 
+  .app-aviso-wrapper .app-sidebar {
+    margin-left: -20px;
+}
+
+}
+
+/* 2. VERSÃO MOBILE (Celular)
+   Aqui a barra deve ser BAIXA e HORIZONTAL */
+@media (max-width: 767px) {
+  .app-aviso-wrapper .app-sidebar {
+    height: auto !important;
+    min-height: 80px; 
+    width: 100%;      
+    padding-top: 10px !important;
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0 !important;
+    z-index: 1000; 
+  }
+  
+  .app-aviso-wrapper {
+    padding-bottom: 100px; 
+  }
+
+  .info-list {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px; /* ajuste o tamanho */
+}
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./diretoria.css";
 import Sidebar from "../../components/SideBar/Sidebar";
@@ -10,16 +11,20 @@ const API_LINHAS_DISPONIVEIS = 'http://localhost:3001/api/linhas/disponiveis';
 
 const SECRET_PASSWORD = "272006";
 
+
+
+
 /* ============================================================
     MODAL DE AUTENTICAÇÃO
 ============================================================ */
-function AuthModal({ onLogin, error }) {
+function AuthModal({ onLogin, onCancel, error }) {
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onLogin(password);
   };
+
 
   return (
     <div className="auth-modal-overlay">
@@ -47,7 +52,7 @@ function AuthModal({ onLogin, error }) {
             <button
               type="button"
               className="btn btn-outline-secondary px-4 py-2"
-              onClick={() => console.log("Acesso cancelado")}
+              onClick={onCancel}
             >
               Cancelar
             </button>
@@ -316,6 +321,8 @@ export default function DiretoriaPage() {
 
   const [saveStatus, setSaveStatus] = useState({ type: null, message: '' });
 
+  const navigate = useNavigate();
+
   // Mock dados atualizados sem o Amarelo repetido
   const dadosMockados = [
     { id_linha: 1, nome_exibicao: 'Verde 01 - Marquinhos', grupo: 'Verde 01' },
@@ -447,7 +454,9 @@ export default function DiretoriaPage() {
     return (
       <div className="diretoria-wrapper">
         <Sidebar activePage="Diretoria" />
-        <AuthModal onLogin={handleLogin} error={loginError} />
+        <AuthModal onLogin={handleLogin} 
+        error={loginError} 
+        onCancel={() => navigate("/inicio")} />
       </div>
     );
   }
